@@ -46,38 +46,32 @@ export function TradingCard({
     if (!ref.current) return false;
     setBusy(true);
     try {
-      const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2, useCORS: true });
+      const htmlToImage = await import("html-to-image");
       
-      return await new Promise<boolean>((resolve) => {
-        if (copy) {
-          canvas.toBlob(async (blob) => {
-            if (!blob) return resolve(false);
-            try { 
-              await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); 
-              toast.success("Image copied to clipboard!");
-              resolve(true);
-            } catch (err) { 
-              console.error("Clipboard write failed:", err); 
-              toast.error("Failed to copy image. You may need to grant clipboard permissions.");
-              resolve(false);
-            }
-          }, "image/png");
-        } else {
-          canvas.toBlob((blob) => {
-            if (!blob) return resolve(false);
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            document.body.appendChild(a);
-            a.href = url;
-            a.download = `codedna-${data.user.login}.png`;
-            a.click();
-            document.body.removeChild(a);
-            setTimeout(() => URL.revokeObjectURL(url), 100);
-            resolve(true);
-          }, "image/png");
+      const blob = await htmlToImage.toBlob(ref.current, { backgroundColor: 'transparent', pixelRatio: 2 });
+      if (!blob) throw new Error("Failed to generate blob");
+
+      if (copy) {
+        try { 
+          await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); 
+          toast.success("Image copied to clipboard!");
+          return true;
+        } catch (err) { 
+          console.error("Clipboard write failed:", err); 
+          toast.error("Failed to copy image. You may need to grant clipboard permissions.");
+          return false;
         }
-      });
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.href = url;
+        a.download = `codedna-${data.user.login}.png`;
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+        return true;
+      }
     } catch (error) {
       console.error("Failed to export card:", error);
       toast.error("Failed to generate image.");
