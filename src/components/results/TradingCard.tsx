@@ -46,19 +46,23 @@ export function TradingCard({
     setBusy(true);
     try {
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2, useCORS: true });
+      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2, useCORS: true, allowTaint: true });
       if (copy) {
         canvas.toBlob(async (blob) => {
           if (!blob) return;
-          try { await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); } catch {}
+          try { await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); } catch (err) { console.error("Clipboard write failed:", err); }
         });
       } else {
         const url = canvas.toDataURL("image/png");
         const a = document.createElement("a");
+        document.body.appendChild(a);
         a.href = url;
         a.download = `codedna-${data.user.login}.png`;
         a.click();
+        document.body.removeChild(a);
       }
+    } catch (error) {
+      console.error("Failed to export card:", error);
     } finally {
       setBusy(false);
     }
@@ -75,7 +79,7 @@ export function TradingCard({
 
   const linkedin = () => {
     const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, "_blank");
+    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}`, "_blank", "noopener,noreferrer");
   };
 
   return (
