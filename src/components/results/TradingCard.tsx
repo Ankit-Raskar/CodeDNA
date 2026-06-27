@@ -6,6 +6,7 @@ import type { AIInsights } from "@/lib/groq.functions";
 import { topLanguages } from "@/lib/personality";
 import type { Archetype } from "@/lib/archetype";
 import { RARITY_STYLE } from "@/lib/archetype";
+import { toast } from "sonner";
 
 export function TradingCard({
   data,
@@ -42,27 +43,45 @@ export function TradingCard({
   const onLeave = () => { mx.set(0); my.set(0); };
 
   const exportPng = async (copy = false) => {
-    if (!ref.current) return;
+    if (!ref.current) return false;
     setBusy(true);
     try {
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2, useCORS: true, allowTaint: true });
-      if (copy) {
-        canvas.toBlob(async (blob) => {
-          if (!blob) return;
-          try { await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); } catch (err) { console.error("Clipboard write failed:", err); }
-        });
-      } else {
-        const url = canvas.toDataURL("image/png");
-        const a = document.createElement("a");
-        document.body.appendChild(a);
-        a.href = url;
-        a.download = `codedna-${data.user.login}.png`;
-        a.click();
-        document.body.removeChild(a);
-      }
+      const canvas = await html2canvas(ref.current, { backgroundColor: null, scale: 2, useCORS: true });
+      
+      return await new Promise<boolean>((resolve) => {
+        if (copy) {
+          canvas.toBlob(async (blob) => {
+            if (!blob) return resolve(false);
+            try { 
+              await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]); 
+              toast.success("Image copied to clipboard!");
+              resolve(true);
+            } catch (err) { 
+              console.error("Clipboard write failed:", err); 
+              toast.error("Failed to copy image. You may need to grant clipboard permissions.");
+              resolve(false);
+            }
+          }, "image/png");
+        } else {
+          canvas.toBlob((blob) => {
+            if (!blob) return resolve(false);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = url;
+            a.download = `codedna-${data.user.login}.png`;
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            resolve(true);
+          }, "image/png");
+        }
+      });
     } catch (error) {
       console.error("Failed to export card:", error);
+      toast.error("Failed to generate image.");
+      return false;
     } finally {
       setBusy(false);
     }
@@ -74,12 +93,16 @@ export function TradingCard({
       try { await navigator.share({ title: `CodeDNA — ${data.user.login}`, url }); } catch {}
     } else {
       await navigator.clipboard.writeText(url);
+      toast.success("Link copied to clipboard!");
     }
   };
 
-  const linkedin = () => {
-    const url = encodeURIComponent(window.location.href);
-    window.open(`https://www.linkedin.com/shareArticle?mini=true&url=${url}`, "_blank", "noopener,noreferrer");
+  const linkedin = async () => {
+    const success = await exportPng(true);
+    if (success) {
+      const text = encodeURIComponent(`Check out my CodeDNA profile! ${insights.tagline}\n\n${window.location.href}`);
+      window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${text}`, "_blank", "noopener,noreferrer");
+    }
   };
 
   return (
@@ -144,7 +167,7 @@ export function TradingCard({
                   }}
                 >
                   <img
-                    src={data.user.avatar_url}
+                    src={`${data.user.avatar_url}${data.user.avatar_url.includes('?') ? '&' : '?'}not-from-cache`}
                     alt={data.user.login}
                     crossOrigin="anonymous"
                     className="h-full w-full rounded-full border-4 border-white object-cover"
