@@ -134,6 +134,11 @@ export function TradingCard({
                   backgroundPositionX: shineX,
                 }}
               />
+              {/* Noise texture overlay */}
+              <div
+                aria-hidden
+                className="bg-noise pointer-events-none absolute inset-0 mix-blend-overlay opacity-50"
+              />
 
               {/* Header */}
               <div className="relative flex items-center justify-between p-5">

@@ -18,7 +18,8 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
     <motion.form
       onSubmit={submit}
       initial={{ opacity: 0, y: 14 }}
-      animate={{ opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
       transition={{ delay: 0.2, duration: 0.6 }}
       className={`card-soft relative mx-auto flex w-full items-center gap-2 rounded-full p-2 pl-5 ${compact ? "max-w-md" : "max-w-2xl mt-10 ring-soft"}`}
     >
@@ -35,6 +36,7 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
         whileHover={{ scale: 1.04 }}
         whileTap={{ scale: 0.97 }}
         type="submit"
+        aria-label="Search GitHub User"
         className="glow-primary grad-primary flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white"
       >
         <FiZap className="h-4 w-4" /> {compact ? "Decode" : "Decode My DNA"}
