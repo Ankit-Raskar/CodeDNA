@@ -2,7 +2,6 @@
 
 **CodeDNA** is an innovative, highly interactive web application that decodes any developer's GitHub personality and turns it into a stunning, shareable experience. Powered by real GitHub data and advanced AI insights, CodeDNA analyzes your repositories, top languages, and commit habits to generate beautiful visualizations, holographic trading cards, and even career predictions.
 
-![CodeDNA Preview](https://github.com/Ankit-Raskar/CodeDNA/assets/preview.png) *(Add a preview image here)*
 
 ## 🌟 Key Features
 
