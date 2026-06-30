@@ -21,6 +21,44 @@ const SNIPPETS = [
   "archetype === 'Frontend Wizard'",
 ];
 
+function Particles() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  if (!mounted) return null;
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      {Array.from({ length: 40 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full bg-white"
+          initial={{
+            opacity: 0,
+            x: `${Math.random() * 100}vw`,
+            y: `${Math.random() * 100}vh`,
+          }}
+          animate={{
+            y: [null, `${Math.random() * 100 - 30}vh`],
+            opacity: [0, Math.random() * 0.8 + 0.2, 0],
+            scale: [0, Math.random() + 0.5, 0],
+          }}
+          transition={{
+            duration: Math.random() * 4 + 4,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: Math.random() * 5,
+          }}
+          style={{
+            width: Math.random() * 4 + 1 + "px",
+            height: Math.random() * 4 + 1 + "px",
+            boxShadow: `0 0 ${Math.random() * 15 + 5}px rgba(255,255,255,0.9)`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function LoadingScreen({ username }: { username: string }) {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
@@ -44,6 +82,10 @@ export function LoadingScreen({ username }: { username: string }) {
       </div>
       {/* Radial vignette */}
       <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(2,6,23,0.9)_85%)]" />
+      
+      {/* Particles */}
+      <Particles />
+
       {/* Animated gradient blobs */}
       <motion.div
         aria-hidden

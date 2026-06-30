@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { motion } from "framer-motion";
-import { FiArrowLeft } from "react-icons/fi";
+import { motion, useScroll, useSpring } from "framer-motion";
+import { FiArrowLeft, FiChevronDown } from "react-icons/fi";
 
 import { fetchGithubProfile } from "@/lib/github.functions";
 import { generateAIInsights } from "@/lib/groq.functions";
@@ -45,8 +45,24 @@ export const Route = createFileRoute("/results/$username")({
   component: Results,
 });
 
+function ScrollSection({ children }: { children: React.ReactNode }) {
+  return (
+    <motion.section
+      initial={{ opacity: 0, y: 60, filter: "blur(10px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-100px" }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      className="relative"
+    >
+      {children}
+    </motion.section>
+  );
+}
+
 function Results() {
   const { username } = useParams({ from: "/results/$username" });
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
   const gh = useQuery({
     queryKey: ["gh", username],
@@ -123,12 +139,16 @@ function Results() {
 
   return (
     <main className="relative min-h-screen pb-32">
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-fuchsia-500 to-cyan-400 origin-left z-50 shadow-[0_0_10px_rgba(6,182,212,0.8)]"
+        style={{ scaleX }}
+      />
       <ConfettiBurst trigger={!!insights} />
       <ArchetypeRevealOverlay archetype={archetype} username={username} />
-      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6">
-        <Link to="/" className="flex items-center gap-2 text-sm">
-          <span className="grid h-8 w-8 place-items-center rounded-xl grad-primary text-base">🧬</span>
-          <span className="font-display font-bold">CodeDNA</span>
+      <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6 relative z-10">
+        <Link to="/" className="flex items-center gap-2 text-sm group">
+          <span className="grid h-8 w-8 place-items-center rounded-xl bg-white/10 text-base shadow-inner transition-all group-hover:bg-white/20">🧬</span>
+          <span className="font-display font-bold tracking-wider text-white">CodeDNA</span>
         </Link>
         <div className="flex flex-1 items-center justify-end gap-3">
           <div className="hidden w-full max-w-md md:block">
@@ -137,7 +157,7 @@ function Results() {
           <Link
             to="/compare"
             search={{ a: username, b: "" }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/70 px-4 py-2 text-xs font-bold uppercase tracking-wider text-foreground hover:bg-white"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/20 backdrop-blur-md transition-all shadow-lg"
           >
             ⚔ Compare
           </Link>
@@ -145,97 +165,115 @@ function Results() {
       </nav>
 
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
-        className="mx-auto max-w-6xl space-y-28 px-6 md:space-y-32"
+        className="mx-auto max-w-6xl space-y-32 px-6 md:space-y-40 relative z-0"
       >
-        <IdentityCard data={data} />
+        <div className="relative pt-10">
+          <IdentityCard data={data} />
+          
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2, duration: 1 }}
+            className="absolute -bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50"
+          >
+            <span className="text-[10px] font-bold uppercase tracking-widest">Scroll to explore</span>
+            <motion.div 
+              animate={{ y: [0, 8, 0] }} 
+              transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            >
+              <FiChevronDown className="h-5 w-5 text-cyan-400" />
+            </motion.div>
+          </motion.div>
+        </div>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 02" title="Your Archetype" sub="The rare class your code reveals — collect them all." />
           <ArchetypeReveal archetype={archetype} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 03" title="Developer Avatar" sub="A one-of-one identity, generated from your repos." />
           <AvatarGenerator data={data} archetype={archetype} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 04" title="Badges" sub="Achievements unlocked across your journey." />
           <BadgesGrid badges={badges} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 05" title="Developer XP" sub="Your RPG profile. Level up by shipping more open source." />
           <XPSystem level={level.level} pct={level.pct} xp={level.xp} achievements={achievements} archetype={archetypeName} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 06" title="GitHub Wrapped" sub="Your year in code, one story at a time." />
           <Wrapped data={data} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 07" title="Coding DNA" sub="Your signature traits, encoded in a double helix." />
           <DnaHelix data={data} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 08" title="Language Bubbles" sub="The composition of your coding voice." />
           <LanguageBubbles data={data} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 09" title="Repository Galaxy" sub="Every repo is a star. Click one to visit it." />
           <Constellation data={data} />
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 10" title="The Numbers" />
           <StatsGrid data={data} />
           <div className="mt-5">
             <Charts data={data} />
           </div>
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 11" title="AI Mentor" sub={ai.isLoading ? "Consulting the AI mentor…" : "Trained on your repos · ask anything"} />
           {insights ? (
             <AIMentorChat insights={insights} />
           ) : (
-            <div className="card-soft rounded-3xl p-8 text-center text-sm text-muted-foreground">
-              Analyzing developer personality…
+            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f172a]/60 p-8 shadow-2xl backdrop-blur-xl md:p-12 text-center">
+              <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="mx-auto w-12 h-12 text-3xl mb-4">🧠</motion.div>
+              <p className="text-white/70 font-semibold tracking-wider uppercase text-sm">Consulting AI Mentor...</p>
             </div>
           )}
-        </section>
+        </ScrollSection>
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 12" title="Future Path" sub="Where your code is taking you next." />
           <CareerPath data={data} />
-        </section>
+        </ScrollSection>
 
         {insights && (
-          <section>
+          <ScrollSection>
             <SectionTitle eyebrow="Section 13" title="If You Were…" sub="Fun personality projections from your code." />
             <PersonalityCards p={insights.personalities} />
-          </section>
+          </ScrollSection>
         )}
 
-        <section>
+        <ScrollSection>
           <SectionTitle eyebrow="Section 14" title="Developer Timeline" />
           <Timeline data={data} />
-        </section>
+        </ScrollSection>
 
         {insights && (
           <>
-            <section>
+            <ScrollSection>
               <SectionTitle eyebrow="Section 15" title="Developer Yearbook" sub="The signed page. Print-ready memories." />
               <Yearbook data={data} insights={insights} />
-            </section>
+            </ScrollSection>
 
-            <section>
+            <ScrollSection>
               <SectionTitle eyebrow="Section 16" title="Your Trading Card" sub="Hover to tilt. Download to flex." />
               <TradingCard
                 data={data}
@@ -244,12 +282,12 @@ function Results() {
                 archetype={archetype}
                 badges={badges.filter((b) => b.earned).map((b) => `${b.icon} ${b.name}`)}
               />
-            </section>
+            </ScrollSection>
           </>
         )}
       </motion.div>
 
-      <footer className="mx-auto mt-24 max-w-7xl px-6 text-center text-xs text-muted-foreground">
+      <footer className="mx-auto mt-32 max-w-7xl px-6 text-center text-xs font-bold uppercase tracking-widest text-white/30 pb-10">
         Data from GitHub · Insights by Groq · Built with TanStack Start
       </footer>
     </main>
