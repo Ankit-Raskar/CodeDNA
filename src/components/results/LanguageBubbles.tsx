@@ -1,18 +1,36 @@
-import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useMemo, useState, useRef } from "react";
+import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
 import type { GithubData } from "@/lib/github.functions";
 import { topLanguages } from "@/lib/personality";
 
-const COLORS = ["#6366F1", "#06B6D4", "#8B5CF6", "#F59E0B", "#22C55E", "#EF4444", "#EC4899", "#0EA5E9"];
+const COLORS = [
+  { hex: "#6366F1", name: "indigo" },
+  { hex: "#06B6D4", name: "cyan" },
+  { hex: "#8B5CF6", name: "violet" },
+  { hex: "#F59E0B", name: "amber" },
+  { hex: "#22C55E", name: "green" },
+  { hex: "#EF4444", name: "red" },
+  { hex: "#EC4899", name: "pink" },
+  { hex: "#0EA5E9", name: "sky" }
+];
 
 export function LanguageBubbles({ data }: { data: GithubData }) {
   const langs = useMemo(() => topLanguages(data.languageBytes, 8), [data.languageBytes]);
   const [hover, setHover] = useState<string | null>(null);
 
+  // Mouse tracking for the container glassmorphism
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
   // Pack bubbles in a row using simple physics-like layout
   const W = 720, H = 320;
   const positions = useMemo(() => {
-    const placed: { x: number; y: number; r: number; lang: typeof langs[0]; color: string }[] = [];
+    const placed: { x: number; y: number; r: number; lang: typeof langs[0]; color: typeof COLORS[0] }[] = [];
     const max = Math.max(1, ...langs.map((l) => l.pct));
     langs.forEach((l, i) => {
       const r = 24 + (l.pct / max) * 70;
@@ -46,64 +64,98 @@ export function LanguageBubbles({ data }: { data: GithubData }) {
   }, [langs]);
 
   return (
-    <div className="card-soft relative overflow-hidden rounded-3xl p-6 md:p-8">
-      <div className="mb-4 flex items-end justify-between">
+    <div 
+      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0f172a]/60 p-6 md:p-8 shadow-xl backdrop-blur-xl transition-colors hover:bg-[#0f172a]/80"
+      onMouseMove={handleMouseMove}
+    >
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, rgba(139, 92, 246, 0.15), transparent 80%)`,
+        }}
+      />
+
+      <div className="relative z-10 mb-6 flex items-end justify-between">
         <div>
-          <h3 className="font-display text-xl font-bold">Language Bubbles</h3>
-          <p className="text-sm text-muted-foreground">
-            Each bubble is a language. Bigger = more of your code.
+          <h3 className="font-display text-2xl font-bold text-white drop-shadow-sm">Language Distribution</h3>
+          <p className="mt-1 text-sm text-white/50">
+            A breakdown of your most actively written code.
           </p>
         </div>
         {hover && (
           <motion.div
             key={hover}
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="rounded-full bg-muted px-3 py-1 text-xs font-semibold"
+            initial={{ opacity: 0, scale: 0.9, y: -6 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wide text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md"
           >
             {hover}
           </motion.div>
         )}
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-[300px] w-full md:h-[360px]">
+
+      <svg viewBox={`0 0 ${W} ${H}`} className="relative z-10 h-[300px] w-full md:h-[360px] overflow-visible cursor-crosshair">
+        <defs>
+          {COLORS.map(c => (
+            <radialGradient id={`grad-${c.name}`} key={c.name} cx="30%" cy="30%" r="70%">
+              <stop offset="0%" stopColor="#ffffff" stopOpacity="0.8" />
+              <stop offset="30%" stopColor={c.hex} stopOpacity="0.8" />
+              <stop offset="100%" stopColor={c.hex} stopOpacity="0.1" />
+            </radialGradient>
+          ))}
+          <filter id="orbGlow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="8" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+
         {positions.map((p, i) => (
-          <g key={p.lang.name} onMouseEnter={() => setHover(`${p.lang.name} · ${p.lang.pct}%`)} onMouseLeave={() => setHover(null)} style={{ cursor: "pointer" }}>
+          <g 
+            key={p.lang.name} 
+            onMouseEnter={() => setHover(`${p.lang.name} · ${p.lang.pct}%`)} 
+            onMouseLeave={() => setHover(null)}
+          >
             <motion.circle
               cx={p.x}
               cy={p.y}
               r={p.r}
-              fill={p.color}
-              fillOpacity={0.18}
-              stroke={p.color}
-              strokeWidth={2}
+              fill={`url(#grad-${p.color.name})`}
+              stroke={p.color.hex}
+              strokeWidth={1.5}
+              strokeOpacity={0.5}
               initial={{ scale: 0, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: i * 0.08, type: "spring", stiffness: 140 }}
-              whileHover={{ scale: 1.08 }}
-              style={{ originX: `${p.x}px`, originY: `${p.y}px`, filter: `drop-shadow(0 4px 16px ${p.color}55)` }}
+              transition={{ delay: i * 0.08, type: "spring", stiffness: 140, damping: 15 }}
+              whileHover={{ scale: 1.15 }}
+              style={{ originX: `${p.x}px`, originY: `${p.y}px`, filter: "url(#orbGlow)" }}
             />
+            {/* Center dot for visual anchor */}
+            <circle cx={p.x} cy={p.y} r={1.5} fill="#fff" opacity={0.4} style={{ pointerEvents: "none" }} />
             <text
               x={p.x}
-              y={p.y - 2}
+              y={p.y - Math.min(10, p.r * 0.2)}
               textAnchor="middle"
-              className="font-display text-sm font-bold"
-              fill={p.color}
-              style={{ pointerEvents: "none" }}
+              className="font-display font-black tracking-tight"
+              fontSize={Math.max(10, Math.min(20, p.r * 0.4))}
+              fill="#ffffff"
+              style={{ pointerEvents: "none", textShadow: "0 2px 10px rgba(0,0,0,0.8)" }}
             >
               {p.lang.name}
             </text>
-            <text
-              x={p.x}
-              y={p.y + 14}
-              textAnchor="middle"
-              className="text-[10px] font-semibold"
-              fill={p.color}
-              opacity={0.85}
-              style={{ pointerEvents: "none" }}
-            >
-              {p.lang.pct}%
-            </text>
+            {p.r > 25 && (
+              <text
+                x={p.x}
+                y={p.y + Math.min(16, p.r * 0.35)}
+                textAnchor="middle"
+                className="font-bold"
+                fontSize={Math.max(9, Math.min(14, p.r * 0.25))}
+                fill="rgba(255,255,255,0.7)"
+                style={{ pointerEvents: "none", textShadow: "0 1px 5px rgba(0,0,0,0.8)" }}
+              >
+                {p.lang.pct}%
+              </text>
+            )}
           </g>
         ))}
       </svg>

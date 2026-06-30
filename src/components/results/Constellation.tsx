@@ -32,6 +32,7 @@ export function Constellation({ data }: { data: GithubData }) {
   );
   const [hover, setHover] = useState<GhRepo | null>(null);
   const [activeLang, setActiveLang] = useState<string | null>(null);
+  const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
 
   const W = 900, H = 560;
   const cx = W / 2, cy = H / 2;
@@ -134,7 +135,29 @@ export function Constellation({ data }: { data: GithubData }) {
         </div>
       </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="relative h-[420px] w-full md:h-[520px]">
+      {/* Zoom Controls */}
+      <div className="absolute right-4 top-16 z-20 flex flex-col gap-2 rounded-lg border border-white/10 bg-black/50 p-1 backdrop-blur-md">
+        <button
+          onClick={() => setTransform((prev) => ({ ...prev, scale: Math.min(prev.scale + 0.3, 3) }))}
+          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-white/70 hover:bg-white/20 hover:text-white"
+        >
+          +
+        </button>
+        <button
+          onClick={() => setTransform((prev) => ({ ...prev, scale: Math.max(prev.scale - 0.3, 0.5) }))}
+          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-white/70 hover:bg-white/20 hover:text-white"
+        >
+          -
+        </button>
+        <button
+          onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
+          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-[10px] font-bold text-white/70 hover:bg-white/20 hover:text-white"
+        >
+          FIT
+        </button>
+      </div>
+
+      <svg viewBox={`0 0 ${W} ${H}`} className="relative h-[420px] w-full md:h-[520px] overflow-hidden cursor-grab active:cursor-grabbing">
         <defs>
           <radialGradient id="core">
             <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
@@ -156,104 +179,113 @@ export function Constellation({ data }: { data: GithubData }) {
           </filter>
         </defs>
 
-        {/* Galactic halo + core */}
-        <ellipse cx={cx} cy={cy} rx={W / 2.1} ry={H / 2.3} fill="url(#halo)" />
-        <circle cx={cx} cy={cy} r={140} fill="url(#core)" />
+        <motion.g
+          drag
+          dragConstraints={{ left: -W, right: W, top: -H, bottom: H }}
+          animate={{ x: transform.x, y: transform.y, scale: transform.scale }}
+          transition={{ type: "spring", stiffness: 200, damping: 25 }}
+          style={{ transformOrigin: "center center" }}
+        >
+          {/* Galactic halo + core */}
+          <ellipse cx={cx} cy={cy} rx={W / 2.1} ry={H / 2.3} fill="url(#halo)" />
+          <circle cx={cx} cy={cy} r={140} fill="url(#core)" />
 
-        {/* Orbital rings */}
-        {[110, 180, 250, 320].map((r, i) => (
-          <ellipse
-            key={r}
-            cx={cx}
-            cy={cy}
-            rx={r}
-            ry={r * 0.62}
-            fill="none"
-            stroke="rgba(255,255,255,0.06)"
-            strokeDasharray={i % 2 ? "2 6" : "1 4"}
-          />
-        ))}
+          {/* Orbital rings */}
+          {[110, 180, 250, 320].map((r, i) => (
+            <ellipse
+              key={r}
+              cx={cx}
+              cy={cy}
+              rx={r}
+              ry={r * 0.62}
+              fill="none"
+              stroke="rgba(255,255,255,0.06)"
+              strokeDasharray={i % 2 ? "2 6" : "1 4"}
+            />
+          ))}
 
-        {/* Connection lines per language arm */}
-        {langs.map((l) => {
-          const pts = positions.filter((p) => p.lang === l);
-          if (pts.length < 2) return null;
-          const sorted = [...pts].sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
-          const d = sorted.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-          const dim = activeLang && activeLang !== l ? 0.06 : 0.28;
-          return <path key={l} d={d} stroke={colorFor(l)} strokeOpacity={dim} strokeWidth={1} fill="none" />;
-        })}
+          {/* Connection lines per language arm */}
+          {langs.map((l) => {
+            const pts = positions.filter((p) => p.lang === l);
+            if (pts.length < 2) return null;
+            const sorted = [...pts].sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
+            const d = sorted.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+            const dim = activeLang && activeLang !== l ? 0.05 : (activeLang === l ? 0.6 : 0.3);
+            return <path key={l} d={d} stroke={colorFor(l)} strokeOpacity={dim} strokeWidth={activeLang === l ? 2 : 1} fill="none" style={{ filter: activeLang === l ? "drop-shadow(0 0 4px rgba(255,255,255,0.5))" : "none" }} />;
+          })}
 
-        {/* Stars (repos) */}
-        {positions.map((p, i) => {
-          const dim = activeLang && activeLang !== p.lang;
-          const c = colorFor(p.lang);
-          return (
-            <motion.g
-              key={p.r.id}
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: dim ? 0.15 : 1, scale: 1 }}
-              animate={{ opacity: dim ? 0.15 : 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: (i % 30) * 0.02, duration: 0.4 }}
-            >
-              {/* halo */}
-              <motion.circle
-                cx={p.x}
-                cy={p.y}
-                r={p.size + 5}
-                fill={c}
-                opacity={0.18}
-                animate={{ r: [p.size + 5, p.size + 11, p.size + 5], opacity: [0.12, 0.35, 0.12] }}
-                transition={{ duration: 3 + (i % 5) * 0.4, delay: (i % 7) * 0.2, repeat: Infinity }}
-                style={{ pointerEvents: "none" }}
-              />
-              {/* star */}
-              <motion.circle
-                cx={p.x}
-                cy={p.y}
-                r={p.size}
-                fill={c}
-                filter={p.size > 7 ? "url(#bigGlow)" : "url(#starGlow)"}
-                whileHover={{ scale: 1.9 }}
-                onMouseEnter={() => setHover(p.r)}
-                onMouseLeave={() => setHover(null)}
-                onClick={() => window.open(p.r.html_url, "_blank")}
-                style={{ cursor: "pointer", transformOrigin: `${p.x}px ${p.y}px` }}
-              />
-              {/* sparkle for big stars */}
-              {p.size > 9 && (
-                <g opacity={0.85} style={{ pointerEvents: "none" }}>
-                  <line x1={p.x - p.size * 1.8} y1={p.y} x2={p.x + p.size * 1.8} y2={p.y} stroke={c} strokeWidth={0.6} />
-                  <line x1={p.x} y1={p.y - p.size * 1.8} x2={p.x} y2={p.y + p.size * 1.8} stroke={c} strokeWidth={0.6} />
-                </g>
-              )}
-            </motion.g>
-          );
-        })}
+          {/* Stars (repos) */}
+          {positions.map((p, i) => {
+            const dim = activeLang && activeLang !== p.lang;
+            const c = colorFor(p.lang);
+            return (
+              <motion.g
+                key={p.r.id}
+                initial={{ opacity: 0, scale: 0 }}
+                whileInView={{ opacity: dim ? 0.15 : 1, scale: 1 }}
+                animate={{ opacity: dim ? 0.15 : 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: (i % 30) * 0.02, duration: 0.4 }}
+              >
+                {/* halo */}
+                <motion.circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={p.size + 5}
+                  fill={c}
+                  opacity={0.18}
+                  animate={{ r: [p.size + 5, p.size + 11, p.size + 5], opacity: [0.12, 0.35, 0.12] }}
+                  transition={{ duration: 3 + (i % 5) * 0.4, delay: (i % 7) * 0.2, repeat: Infinity }}
+                  style={{ pointerEvents: "none" }}
+                />
+                {/* star */}
+                <motion.circle
+                  cx={p.x}
+                  cy={p.y}
+                  r={p.size}
+                  fill={c}
+                  filter={p.size > 7 ? "url(#bigGlow)" : "url(#starGlow)"}
+                  whileHover={{ scale: 1.9 }}
+                  onMouseEnter={() => setHover(p.r)}
+                  onMouseLeave={() => setHover(null)}
+                  onClick={() => window.open(p.r.html_url, "_blank")}
+                  style={{ cursor: "pointer", transformOrigin: `${p.x}px ${p.y}px` }}
+                />
+                {/* sparkle for big stars */}
+                {p.size > 9 && (
+                  <g opacity={0.85} style={{ pointerEvents: "none" }}>
+                    <line x1={p.x - p.size * 1.8} y1={p.y} x2={p.x + p.size * 1.8} y2={p.y} stroke={c} strokeWidth={0.6} />
+                    <line x1={p.x} y1={p.y - p.size * 1.8} x2={p.x} y2={p.y + p.size * 1.8} stroke={c} strokeWidth={0.6} />
+                  </g>
+                )}
+              </motion.g>
+            );
+          })}
 
-        {/* Labels for top repos */}
-        {topNamed.map((p) => (
-          <g key={`l-${p.r.id}`} style={{ pointerEvents: "none" }}>
-            <text
-              x={p.x + p.size + 8}
-              y={p.y + 3}
-              fill="rgba(255,255,255,0.85)"
-              fontSize={11}
-              fontFamily="ui-monospace, monospace"
-            >
-              {p.r.name}
-            </text>
-            <text
-              x={p.x + p.size + 8}
-              y={p.y + 16}
-              fill="rgba(255,255,255,0.45)"
-              fontSize={9}
-            >
-              ★ {p.r.stargazers_count}
-            </text>
-          </g>
-        ))}
+          {/* Labels for top repos */}
+          {topNamed.map((p) => (
+            <g key={`l-${p.r.id}`} style={{ pointerEvents: "none" }}>
+              <text
+                x={p.x + p.size + 8}
+                y={p.y + 3}
+                fill="rgba(255,255,255,0.85)"
+                fontSize={11}
+                fontFamily="ui-monospace, monospace"
+                style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}
+              >
+                {p.r.name}
+              </text>
+              <text
+                x={p.x + p.size + 8}
+                y={p.y + 16}
+                fill="rgba(255,255,255,0.45)"
+                fontSize={9}
+              >
+                ★ {p.r.stargazers_count}
+              </text>
+            </g>
+          ))}
+        </motion.g>
       </svg>
 
       {/* Hover info */}
