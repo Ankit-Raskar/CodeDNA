@@ -15,7 +15,11 @@ export type AIInsights = {
     animal: string;
     weapon: string;
     movie: string;
+    startup: string;
+    programming_language: string;
   };
+  roasts: string[];
+  encouragement: string[];
 };
 
 const FALLBACK: AIInsights = {
@@ -33,7 +37,19 @@ const FALLBACK: AIInsights = {
     animal: "Octopus — parallel problem solver",
     weapon: "Katana — precise and elegant",
     movie: "The Matrix — sees patterns others don't",
+    startup: "OpenAI — ambitious and moving fast",
+    programming_language: "TypeScript — strict but helpful",
   },
+  roasts: [
+    "You have 47 repositories and 46 are unfinished.",
+    "Your commit history looks like a heart monitor of someone panicking.",
+    "You use JavaScript, Python, and TypeScript. Indecisive much?"
+  ],
+  encouragement: [
+    "You're experimenting with many technologies, which is exactly how great developers learn.",
+    "Your consistency shows strong curiosity and a builder mindset.",
+    "Keep building! The world needs more developers like you."
+  ],
 };
 
 export const generateAIInsights = createServerFn({ method: "POST" })
@@ -57,8 +73,12 @@ export const generateAIInsights = createServerFn({ method: "POST" })
     "city": string,
     "animal": string,
     "weapon": string,
-    "movie": string
-  }
+    "movie": string,
+    "startup": string,
+    "programming_language": string
+  },
+  "roasts": string[3-5],                // funny, playful, non-insulting roasts about their coding habits
+  "encouragement": string[3-5]          // positive feedback and growth advice
 }`;
 
     try {

@@ -8,7 +8,7 @@ export type Badge = {
   earned: boolean;
 };
 
-export type Achievement = { id: string; name: string; description: string; earned: boolean };
+export type Achievement = { id: string; name: string; description: string; earned: boolean; rarity: "Common" | "Rare" | "Epic" | "Legendary" };
 
 export function topLanguages(bytes: Record<string, number>, n = 6) {
   const total = Object.values(bytes).reduce((a, b) => a + b, 0) || 1;
@@ -50,16 +50,23 @@ export function computeBadges(data: GithubData): Badge[] {
 
 export function computeAchievements(data: GithubData): Achievement[] {
   const yearsActive = Math.max(1, Math.floor((Date.now() - +new Date(data.user.created_at)) / (1000 * 60 * 60 * 24 * 365)));
+  const langs = Object.keys(data.languageBytes);
+  const isReactMaster = langs.some(l => /javascript|typescript/i.test(l)) && data.repos.some(r => r.name.toLowerCase().includes("react") || r.description?.toLowerCase().includes("react"));
+  
+  // Custom Night Owl logic based on push times or activity
+  const recentPushes = data.repos.filter((r) => Date.now() - +new Date(r.pushed_at) < 1000 * 60 * 60 * 24 * 60).length;
+
   return [
-    { id: "first", name: "First Light", description: "Created a GitHub account", earned: true },
-    { id: "10repos", name: "Repository Collector", description: "Created 10+ repositories", earned: data.totals.repos >= 10 },
-    { id: "50repos", name: "Code Addict", description: "50+ repositories", earned: data.totals.repos >= 50 },
-    { id: "100repos", name: "Legendary Builder", description: "100+ repositories", earned: data.totals.repos >= 100 },
-    { id: "stars100", name: "Starlit", description: "100+ total stars", earned: data.totals.stars >= 100 },
-    { id: "stars1k", name: "Open Source Hero", description: "1000+ total stars", earned: data.totals.stars >= 1000 },
-    { id: "polyglot", name: "Polyglot", description: "5+ languages used", earned: Object.keys(data.languageBytes).length >= 5 },
-    { id: "veteran", name: `${yearsActive}-Year Veteran`, description: `Coding on GitHub for ${yearsActive}+ years`, earned: yearsActive >= 3 },
-    { id: "ai-future", name: "Future AI Engineer", description: "Built AI-related projects", earned: data.totals.topics.some((t) => /ai|ml|llm|gpt|openai/i.test(t)) },
+    { id: "react", name: "React Master", description: "Built projects with React.", earned: isReactMaster, rarity: "Rare" },
+    { id: "opensource", name: "Open Source Hero", description: "Earned over 100 stars on your repositories.", earned: data.totals.stars >= 100, rarity: "Epic" },
+    { id: "ai", name: "AI Builder", description: "Built AI-related projects (LLM, Python, etc).", earned: data.totals.topics.some((t) => /ai|ml|llm|gpt|openai|python/i.test(t)), rarity: "Rare" },
+    { id: "night", name: "Night Owl", description: "Pushed code consistently during late hours (active recently).", earned: recentPushes >= 10, rarity: "Common" },
+    { id: "hackathon", name: "Hackathon Warrior", description: "Created many repositories rapidly.", earned: data.repos.length >= 30, rarity: "Epic" },
+    { id: "addict", name: "Code Addict", description: "Created more than 50 repositories.", earned: data.totals.repos >= 50, rarity: "Legendary" },
+    { id: "polyglot", name: "Polyglot Developer", description: "Used 5 or more different programming languages.", earned: langs.length >= 5, rarity: "Rare" },
+    { id: "bug", name: "Bug Slayer", description: "Fixed bugs and maintained old projects.", earned: yearsActive >= 2, rarity: "Common" },
+    { id: "legendary", name: "Legendary Builder", description: "Reached over 100 repositories or 1000 stars.", earned: data.totals.repos >= 100 || data.totals.stars >= 1000, rarity: "Legendary" },
+    { id: "consistent", name: "Consistent Coder", description: "Has been coding on GitHub for 3+ years.", earned: yearsActive >= 3, rarity: "Epic" },
   ];
 }
 

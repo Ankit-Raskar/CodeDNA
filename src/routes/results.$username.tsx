@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion, useScroll, useSpring } from "framer-motion";
@@ -32,6 +33,10 @@ import { Wrapped } from "@/components/results/Wrapped";
 import { Yearbook } from "@/components/results/Yearbook";
 import { DnaHelix } from "@/components/results/DnaHelix";
 import { computeArchetype } from "@/lib/archetype";
+import { QuizModal } from "@/components/results/QuizModal";
+import { AIFeedback } from "@/components/results/AIFeedback";
+import { TimeMachine } from "@/components/results/TimeMachine";
+import { ResumeGenerator } from "@/components/results/ResumeGenerator";
 
 export const Route = createFileRoute("/results/$username")({
   head: ({ params }) => ({
@@ -136,6 +141,7 @@ function Results() {
   const insights = ai.data ?? null;
   const archetype = computeArchetype(data);
   const archetypeName = insights?.archetype || archetype.name;
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
   return (
     <main className="relative min-h-screen pb-32">
@@ -144,7 +150,15 @@ function Results() {
         style={{ scaleX }}
       />
       <ConfettiBurst trigger={!!insights} />
-      <ArchetypeRevealOverlay archetype={archetype} username={username} />
+      
+      {!quizCompleted && (
+        <QuizModal username={username} onComplete={() => setQuizCompleted(true)} />
+      )}
+      
+      {quizCompleted && (
+        <ArchetypeRevealOverlay archetype={archetype} username={username} />
+      )}
+
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6 relative z-10">
         <Link to="/" className="flex items-center gap-2 text-sm group">
           <span className="grid h-8 w-8 place-items-center rounded-xl bg-white/10 text-base shadow-inner transition-all group-hover:bg-white/20">🧬</span>
@@ -173,6 +187,10 @@ function Results() {
         <div className="relative pt-10">
           <IdentityCard data={data} />
           
+          {insights && (
+            <AIFeedback insights={insights} />
+          )}
+
           <motion.div 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,7 +219,7 @@ function Results() {
 
         <ScrollSection>
           <SectionTitle eyebrow="Section 04" title="Badges" sub="Achievements unlocked across your journey." />
-          <BadgesGrid badges={badges} />
+          <BadgesGrid badges={achievements} />
         </ScrollSection>
 
         <ScrollSection>
@@ -228,6 +246,14 @@ function Results() {
           <SectionTitle eyebrow="Section 09" title="Repository Galaxy" sub="Every repo is a star. Click one to visit it." />
           <Constellation data={data} />
         </ScrollSection>
+
+        <section className="mb-24">
+          <TimeMachine data={data} />
+        </section>
+
+        <section className="mb-24">
+          <ResumeGenerator data={data} />
+        </section>
 
         <ScrollSection>
           <SectionTitle eyebrow="Section 10" title="The Numbers" />

@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { Star, GitFork, ExternalLink } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Star, GitFork, ExternalLink, X } from "lucide-react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import type { GithubData, GhRepo } from "@/lib/github.functions";
 
 const LANG_COLORS: Record<string, string> = {
@@ -30,9 +31,10 @@ export function Constellation({ data }: { data: GithubData }) {
         .slice(0, 80),
     [data.repos]
   );
+
   const [hover, setHover] = useState<GhRepo | null>(null);
+  const [clickedRepo, setClickedRepo] = useState<GhRepo | null>(null);
   const [activeLang, setActiveLang] = useState<string | null>(null);
-  const [transform, setTransform] = useState({ x: 0, y: 0, scale: 1 });
 
   const W = 900, H = 560;
   const cx = W / 2, cy = H / 2;
@@ -62,15 +64,13 @@ export function Constellation({ data }: { data: GithubData }) {
       const rand2 = (seed2 / 2147483648) % 1;
 
       const starsNorm = r.stargazers_count / maxStars; // 0..1
-      // Bigger repos closer to galactic core
       const t = 0.15 + (1 - starsNorm) * 0.85;
       const baseR = 60 + t * (Math.min(W, H) / 2 - 80);
-      // Spiral: angle grows with radius
       const spiral = (baseR / 60) * 0.65;
       const armSpread = (rand1 - 0.5) * 0.55;
       const a = (armAngle[lang] || 0) + spiral + armSpread;
       const x = cx + Math.cos(a) * baseR;
-      const y = cy + Math.sin(a) * baseR * 0.62; // flatten
+      const y = cy + Math.sin(a) * baseR * 0.62;
       const size = 2.4 + Math.pow(starsNorm, 0.55) * 13;
       return { r, x, y, size, lang, idx, rand2 };
     });
@@ -135,179 +135,244 @@ export function Constellation({ data }: { data: GithubData }) {
         </div>
       </div>
 
-      {/* Zoom Controls */}
-      <div className="absolute right-4 top-16 z-20 flex flex-col gap-2 rounded-lg border border-white/10 bg-black/50 p-1 backdrop-blur-md">
-        <button
-          onClick={() => setTransform((prev) => ({ ...prev, scale: Math.min(prev.scale + 0.3, 3) }))}
-          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-white/70 hover:bg-white/20 hover:text-white"
+      {/* Galaxy canvas with zoom/pan */}
+      <div className="relative h-[420px] w-full md:h-[520px] overflow-hidden rounded-2xl">
+        <TransformWrapper
+          initialScale={1}
+          minScale={0.4}
+          maxScale={4}
+          centerOnInit={true}
         >
-          +
-        </button>
-        <button
-          onClick={() => setTransform((prev) => ({ ...prev, scale: Math.max(prev.scale - 0.3, 0.5) }))}
-          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-white/70 hover:bg-white/20 hover:text-white"
-        >
-          -
-        </button>
-        <button
-          onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
-          className="grid h-8 w-8 place-items-center rounded bg-white/5 text-[10px] font-bold text-white/70 hover:bg-white/20 hover:text-white"
-        >
-          FIT
-        </button>
-      </div>
+          {({ zoomIn, zoomOut, resetTransform }) => (
+            <>
+              {/* Zoom Controls */}
+              <div className="absolute right-3 top-3 z-20 flex flex-col gap-1.5 rounded-xl border border-white/10 bg-black/60 p-1.5 backdrop-blur-md">
+                <button
+                  onClick={() => zoomIn()}
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-white/70 hover:bg-white/20 hover:text-white transition-colors font-bold text-lg"
+                >
+                  +
+                </button>
+                <button
+                  onClick={() => zoomOut()}
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-white/70 hover:bg-white/20 hover:text-white transition-colors font-bold text-xl"
+                >
+                  −
+                </button>
+                <button
+                  onClick={() => resetTransform()}
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-[9px] font-bold text-white/70 hover:bg-white/20 hover:text-white transition-colors"
+                >
+                  FIT
+                </button>
+              </div>
 
-      <svg viewBox={`0 0 ${W} ${H}`} className="relative h-[420px] w-full md:h-[520px] overflow-hidden cursor-grab active:cursor-grabbing">
-        <defs>
-          <radialGradient id="core">
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
-            <stop offset="20%" stopColor="#A5B4FC" stopOpacity="0.55" />
-            <stop offset="55%" stopColor="#6366F1" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#0F172A" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="halo">
-            <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.22" />
-            <stop offset="100%" stopColor="#0F172A" stopOpacity="0" />
-          </radialGradient>
-          <filter id="starGlow">
-            <feGaussianBlur stdDeviation="2.6" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-          <filter id="bigGlow">
-            <feGaussianBlur stdDeviation="6" result="b" />
-            <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
-        </defs>
+              <TransformComponent wrapperStyle={{ width: "100%", height: "100%" }}>
+                <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-full" style={{ minWidth: W, minHeight: H }}>
+                  <defs>
+                    <radialGradient id="core">
+                      <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.9" />
+                      <stop offset="20%" stopColor="#A5B4FC" stopOpacity="0.55" />
+                      <stop offset="55%" stopColor="#6366F1" stopOpacity="0.18" />
+                      <stop offset="100%" stopColor="#0F172A" stopOpacity="0" />
+                    </radialGradient>
+                    <radialGradient id="halo">
+                      <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.22" />
+                      <stop offset="100%" stopColor="#0F172A" stopOpacity="0" />
+                    </radialGradient>
+                    <filter id="starGlow">
+                      <feGaussianBlur stdDeviation="2.6" result="b" />
+                      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                    <filter id="bigGlow">
+                      <feGaussianBlur stdDeviation="6" result="b" />
+                      <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                  </defs>
 
-        <motion.g
-          drag
-          dragConstraints={{ left: -W, right: W, top: -H, bottom: H }}
-          animate={{ x: transform.x, y: transform.y, scale: transform.scale }}
-          transition={{ type: "spring", stiffness: 200, damping: 25 }}
-          style={{ transformOrigin: "center center" }}
-        >
-          {/* Galactic halo + core */}
-          <ellipse cx={cx} cy={cy} rx={W / 2.1} ry={H / 2.3} fill="url(#halo)" />
-          <circle cx={cx} cy={cy} r={140} fill="url(#core)" />
+                  <g>
+                    {/* Galactic halo + core */}
+                    <ellipse cx={cx} cy={cy} rx={W / 2.1} ry={H / 2.3} fill="url(#halo)" />
+                    <circle cx={cx} cy={cy} r={140} fill="url(#core)" />
 
-          {/* Orbital rings */}
-          {[110, 180, 250, 320].map((r, i) => (
-            <ellipse
-              key={r}
-              cx={cx}
-              cy={cy}
-              rx={r}
-              ry={r * 0.62}
-              fill="none"
-              stroke="rgba(255,255,255,0.06)"
-              strokeDasharray={i % 2 ? "2 6" : "1 4"}
-            />
-          ))}
+                    {/* Orbital rings */}
+                    {[110, 180, 250, 320].map((r, i) => (
+                      <ellipse
+                        key={r}
+                        cx={cx}
+                        cy={cy}
+                        rx={r}
+                        ry={r * 0.62}
+                        fill="none"
+                        stroke="rgba(255,255,255,0.06)"
+                        strokeDasharray={i % 2 ? "2 6" : "1 4"}
+                      />
+                    ))}
 
-          {/* Connection lines per language arm */}
-          {langs.map((l) => {
-            const pts = positions.filter((p) => p.lang === l);
-            if (pts.length < 2) return null;
-            const sorted = [...pts].sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
-            const d = sorted.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-            const dim = activeLang && activeLang !== l ? 0.05 : (activeLang === l ? 0.6 : 0.3);
-            return <path key={l} d={d} stroke={colorFor(l)} strokeOpacity={dim} strokeWidth={activeLang === l ? 2 : 1} fill="none" style={{ filter: activeLang === l ? "drop-shadow(0 0 4px rgba(255,255,255,0.5))" : "none" }} />;
-          })}
+                    {/* Connection lines per language arm */}
+                    {langs.map((l) => {
+                      const pts = positions.filter((p) => p.lang === l);
+                      if (pts.length < 2) return null;
+                      const sorted = [...pts].sort((a, b) => Math.hypot(a.x - cx, a.y - cy) - Math.hypot(b.x - cx, b.y - cy));
+                      const d = sorted.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+                      const dim = activeLang && activeLang !== l ? 0.05 : (activeLang === l ? 0.6 : 0.3);
+                      return (
+                        <path
+                          key={l}
+                          d={d}
+                          stroke={colorFor(l)}
+                          strokeOpacity={dim}
+                          strokeWidth={activeLang === l ? 2 : 1}
+                          fill="none"
+                          style={{ filter: activeLang === l ? "drop-shadow(0 0 4px rgba(255,255,255,0.5))" : "none" }}
+                        />
+                      );
+                    })}
 
-          {/* Stars (repos) */}
-          {positions.map((p, i) => {
-            const dim = activeLang && activeLang !== p.lang;
-            const c = colorFor(p.lang);
-            return (
-              <motion.g
-                key={p.r.id}
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: dim ? 0.15 : 1, scale: 1 }}
-                animate={{ opacity: dim ? 0.15 : 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: (i % 30) * 0.02, duration: 0.4 }}
-              >
-                {/* halo */}
-                <motion.circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={p.size + 5}
-                  fill={c}
-                  opacity={0.18}
-                  animate={{ r: [p.size + 5, p.size + 11, p.size + 5], opacity: [0.12, 0.35, 0.12] }}
-                  transition={{ duration: 3 + (i % 5) * 0.4, delay: (i % 7) * 0.2, repeat: Infinity }}
-                  style={{ pointerEvents: "none" }}
-                />
-                {/* star */}
-                <motion.circle
-                  cx={p.x}
-                  cy={p.y}
-                  r={p.size}
-                  fill={c}
-                  filter={p.size > 7 ? "url(#bigGlow)" : "url(#starGlow)"}
-                  whileHover={{ scale: 1.9 }}
-                  onMouseEnter={() => setHover(p.r)}
-                  onMouseLeave={() => setHover(null)}
-                  onClick={() => window.open(p.r.html_url, "_blank")}
-                  style={{ cursor: "pointer", transformOrigin: `${p.x}px ${p.y}px` }}
-                />
-                {/* sparkle for big stars */}
-                {p.size > 9 && (
-                  <g opacity={0.85} style={{ pointerEvents: "none" }}>
-                    <line x1={p.x - p.size * 1.8} y1={p.y} x2={p.x + p.size * 1.8} y2={p.y} stroke={c} strokeWidth={0.6} />
-                    <line x1={p.x} y1={p.y - p.size * 1.8} x2={p.x} y2={p.y + p.size * 1.8} stroke={c} strokeWidth={0.6} />
+                    {/* Stars (repos) */}
+                    {positions.map((p, i) => {
+                      const dim = activeLang && activeLang !== p.lang;
+                      const c = colorFor(p.lang);
+                      return (
+                        <motion.g
+                          key={p.r.id}
+                          initial={{ opacity: 0, scale: 0 }}
+                          whileInView={{ opacity: dim ? 0.15 : 1, scale: 1 }}
+                          animate={{ opacity: dim ? 0.15 : 1 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: (i % 30) * 0.02, duration: 0.4 }}
+                        >
+                          {/* halo glow */}
+                          <motion.circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={p.size + 5}
+                            fill={c}
+                            opacity={0.18}
+                            animate={{ r: [p.size + 5, p.size + 11, p.size + 5], opacity: [0.12, 0.35, 0.12] }}
+                            transition={{ duration: 3 + (i % 5) * 0.4, delay: (i % 7) * 0.2, repeat: Infinity }}
+                            style={{ pointerEvents: "none" }}
+                          />
+                          {/* star */}
+                          <motion.circle
+                            cx={p.x}
+                            cy={p.y}
+                            r={p.size}
+                            fill={c}
+                            filter={p.size > 7 ? "url(#bigGlow)" : "url(#starGlow)"}
+                            whileHover={{ scale: 1.9 }}
+                            onMouseEnter={() => setHover(p.r)}
+                            onMouseLeave={() => setHover(null)}
+                            onClick={() => setClickedRepo(p.r)}
+                            style={{ cursor: "pointer", transformOrigin: `${p.x}px ${p.y}px` }}
+                          />
+                          {/* sparkle for big stars */}
+                          {p.size > 9 && (
+                            <g opacity={0.85} style={{ pointerEvents: "none" }}>
+                              <line x1={p.x - p.size * 1.8} y1={p.y} x2={p.x + p.size * 1.8} y2={p.y} stroke={c} strokeWidth={0.6} />
+                              <line x1={p.x} y1={p.y - p.size * 1.8} x2={p.x} y2={p.y + p.size * 1.8} stroke={c} strokeWidth={0.6} />
+                            </g>
+                          )}
+                        </motion.g>
+                      );
+                    })}
+
+                    {/* Labels for top repos */}
+                    {topNamed.map((p) => (
+                      <g key={`l-${p.r.id}`} style={{ pointerEvents: "none" }}>
+                        <text
+                          x={p.x + p.size + 8}
+                          y={p.y + 3}
+                          fill="rgba(255,255,255,0.85)"
+                          fontSize={11}
+                          fontFamily="ui-monospace, monospace"
+                          style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}
+                        >
+                          {p.r.name}
+                        </text>
+                        <text
+                          x={p.x + p.size + 8}
+                          y={p.y + 16}
+                          fill="rgba(255,255,255,0.45)"
+                          fontSize={9}
+                        >
+                          ★ {p.r.stargazers_count}
+                        </text>
+                      </g>
+                    ))}
                   </g>
-                )}
-              </motion.g>
-            );
-          })}
+                </svg>
+              </TransformComponent>
+            </>
+          )}
+        </TransformWrapper>
 
-          {/* Labels for top repos */}
-          {topNamed.map((p) => (
-            <g key={`l-${p.r.id}`} style={{ pointerEvents: "none" }}>
-              <text
-                x={p.x + p.size + 8}
-                y={p.y + 3}
-                fill="rgba(255,255,255,0.85)"
-                fontSize={11}
-                fontFamily="ui-monospace, monospace"
-                style={{ textShadow: "0 2px 4px rgba(0,0,0,0.8)" }}
-              >
-                {p.r.name}
-              </text>
-              <text
-                x={p.x + p.size + 8}
-                y={p.y + 16}
-                fill="rgba(255,255,255,0.45)"
-                fontSize={9}
-              >
-                ★ {p.r.stargazers_count}
-              </text>
-            </g>
-          ))}
-        </motion.g>
-      </svg>
+        {/* Hover tooltip */}
+        {hover && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="pointer-events-none absolute left-6 top-4 z-10 max-w-xs rounded-2xl border border-white/15 bg-slate-950/85 p-3 backdrop-blur-md shadow-2xl"
+          >
+            <div className="flex items-center gap-2">
+              <span className="h-2.5 w-2.5 rounded-full" style={{ background: colorFor(hover.language) }} />
+              <p className="text-sm font-bold">{hover.name}</p>
+              <ExternalLink className="ml-auto h-3 w-3 text-white/50" />
+            </div>
+            <div className="mt-1 flex items-center gap-3 text-[11px] text-white/60">
+              <span>{hover.language || "—"}</span>
+              <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" />{hover.stargazers_count}</span>
+              <span className="inline-flex items-center gap-1"><GitFork className="h-3 w-3" />{hover.forks_count ?? 0}</span>
+            </div>
+            {hover.description && <p className="mt-1.5 line-clamp-2 text-xs text-white/80">{hover.description}</p>}
+          </motion.div>
+        )}
 
-      {/* Hover info */}
-      {hover && (
-        <motion.div
-          initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="pointer-events-none absolute left-6 top-16 z-10 max-w-xs rounded-2xl border border-white/15 bg-slate-950/85 p-3 backdrop-blur-md shadow-2xl"
-        >
-          <div className="flex items-center gap-2">
-            <span className="h-2.5 w-2.5 rounded-full" style={{ background: colorFor(hover.language) }} />
-            <p className="text-sm font-bold">{hover.name}</p>
-            <ExternalLink className="ml-auto h-3 w-3 text-white/50" />
-          </div>
-          <div className="mt-1 flex items-center gap-3 text-[11px] text-white/60">
-            <span>{hover.language || "—"}</span>
-            <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" />{hover.stargazers_count}</span>
-            <span className="inline-flex items-center gap-1"><GitFork className="h-3 w-3" />{hover.forks_count ?? 0}</span>
-          </div>
-          {hover.description && <p className="mt-1.5 line-clamp-2 text-xs text-white/80">{hover.description}</p>}
-        </motion.div>
-      )}
+        {/* Click popup */}
+        <AnimatePresence>
+          {clickedRepo && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 10 }}
+              className="absolute bottom-4 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-white/20 bg-slate-900/95 p-5 shadow-2xl backdrop-blur-xl"
+            >
+              <button
+                onClick={() => setClickedRepo(null)}
+                className="absolute right-3 top-3 text-white/50 hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+              <div className="flex items-center gap-3">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5">
+                  <Star className="h-5 w-5 text-amber-400" />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="truncate font-display font-bold text-white">{clickedRepo.name}</h4>
+                  <div className="flex items-center gap-2 text-xs text-white/50">
+                    <span className="flex items-center gap-1"><Star className="h-3 w-3" /> {clickedRepo.stargazers_count}</span>
+                    <span className="flex items-center gap-1"><GitFork className="h-3 w-3" /> {clickedRepo.forks_count}</span>
+                    <span className="truncate">{clickedRepo.language}</span>
+                  </div>
+                </div>
+              </div>
+              {clickedRepo.description && (
+                <p className="mt-3 line-clamp-3 text-sm text-white/70">{clickedRepo.description}</p>
+              )}
+              <div className="mt-4">
+                <a
+                  href={clickedRepo.html_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-white/10 py-2.5 text-xs font-bold text-white transition-colors hover:bg-white/20"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> View on GitHub
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* Legend / filter */}
       <div className="relative mt-4 flex flex-wrap gap-2 px-1 text-xs">
@@ -338,7 +403,7 @@ export function Constellation({ data }: { data: GithubData }) {
       </div>
 
       <p className="relative mt-3 px-1 text-[11px] text-white/40">
-        Tip: hover a star for details, click to open the repo. Filter by language above.
+        Tip: hover a star for details · click to open repo popup · use +/− or scroll to zoom.
       </p>
     </div>
   );
