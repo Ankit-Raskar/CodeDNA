@@ -123,13 +123,13 @@ export function Constellation({ data }: { data: GithubData }) {
       <div className="relative mb-3 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2 text-xs">
           <span className="inline-flex h-2 w-2 animate-pulse rounded-full bg-cyan-300 shadow-[0_0_10px_#67e8f9]" />
-          <span className="font-mono uppercase tracking-[0.22em] text-foreground/70">Live Galaxy</span>
-          <span className="text-foreground/40">·</span>
-          <span className="text-foreground/70">{repos.length} repos</span>
-          <span className="text-foreground/40">·</span>
-          <span className="text-foreground/70">{langs.length} languages</span>
+          <span className="font-mono uppercase tracking-[0.22em] text-white/70">Live Galaxy</span>
+          <span className="text-white/40">·</span>
+          <span className="text-white/70">{repos.length} repos</span>
+          <span className="text-white/40">·</span>
+          <span className="text-white/70">{langs.length} languages</span>
         </div>
-        <div className="flex items-center gap-3 text-[10px] text-foreground/50">
+        <div className="flex items-center gap-3 text-[10px] text-white/50">
           <span className="inline-flex items-center gap-1.5"><span className="h-1.5 w-1.5 rounded-full bg-white" />small repo</span>
           <span className="inline-flex items-center gap-1.5"><span className="h-2.5 w-2.5 rounded-full bg-white" />core star</span>
         </div>
@@ -146,22 +146,22 @@ export function Constellation({ data }: { data: GithubData }) {
           {({ zoomIn, zoomOut, resetTransform }) => (
             <>
               {/* Zoom Controls */}
-              <div className="absolute right-3 top-3 z-20 flex flex-col gap-1.5 rounded-xl border border-border bg-card p-1.5 backdrop-blur-md">
+              <div className="absolute right-3 top-3 z-20 flex flex-col gap-1.5 rounded-xl border border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
                 <button
                   onClick={() => zoomIn()}
-                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-foreground/70 hover:bg-white/20 hover:text-foreground transition-colors font-bold text-lg"
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-white/70 hover:bg-white/20 hover:text-white transition-colors font-bold text-lg"
                 >
                   +
                 </button>
                 <button
                   onClick={() => zoomOut()}
-                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-foreground/70 hover:bg-white/20 hover:text-foreground transition-colors font-bold text-xl"
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-white/70 hover:bg-white/20 hover:text-white transition-colors font-bold text-xl"
                 >
                   −
                 </button>
                 <button
                   onClick={() => resetTransform()}
-                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-[9px] font-bold text-foreground/70 hover:bg-white/20 hover:text-foreground transition-colors"
+                  className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-[9px] font-bold text-white/70 hover:bg-white/20 hover:text-white transition-colors"
                 >
                   FIT
                 </button>
@@ -312,19 +312,19 @@ export function Constellation({ data }: { data: GithubData }) {
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="pointer-events-none absolute left-6 top-4 z-10 max-w-xs rounded-2xl border border-border bg-background/85 p-3 backdrop-blur-md shadow-2xl"
+            className="pointer-events-none absolute left-6 top-4 z-10 max-w-xs rounded-2xl border border-white/10 bg-slate-900/85 p-3 backdrop-blur-md shadow-2xl text-white"
           >
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: colorFor(hover.language) }} />
               <p className="text-sm font-bold">{hover.name}</p>
-              <ExternalLink className="ml-auto h-3 w-3 text-foreground/50" />
+              <ExternalLink className="ml-auto h-3 w-3 text-white/50" />
             </div>
-            <div className="mt-1 flex items-center gap-3 text-[11px] text-foreground/60">
+            <div className="mt-1 flex items-center gap-3 text-[11px] text-white/60">
               <span>{hover.language || "—"}</span>
               <span className="inline-flex items-center gap-1"><Star className="h-3 w-3" />{hover.stargazers_count}</span>
               <span className="inline-flex items-center gap-1"><GitFork className="h-3 w-3" />{hover.forks_count ?? 0}</span>
             </div>
-            {hover.description && <p className="mt-1.5 line-clamp-2 text-xs text-foreground/80">{hover.description}</p>}
+            {hover.description && <p className="mt-1.5 line-clamp-2 text-xs text-white/80">{hover.description}</p>}
           </motion.div>
         )}
 
@@ -335,21 +335,21 @@ export function Constellation({ data }: { data: GithubData }) {
               initial={{ opacity: 0, scale: 0.9, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 10 }}
-              className="absolute bottom-4 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-border bg-card/95 p-5 shadow-2xl backdrop-blur-xl"
+              className="absolute bottom-4 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-white/10 bg-slate-900/95 p-5 shadow-2xl backdrop-blur-xl text-white"
             >
               <button
                 onClick={() => setClickedRepo(null)}
-                className="absolute right-3 top-3 text-foreground/50 hover:text-foreground transition-colors"
+                className="absolute right-3 top-3 text-white/50 hover:text-white transition-colors"
               >
                 <X className="h-4 w-4" />
               </button>
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-white/5">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5">
                   <Star className="h-5 w-5 text-amber-400" />
                 </div>
                 <div className="min-w-0">
-                  <h4 className="truncate font-display font-bold text-foreground">{clickedRepo.name}</h4>
-                  <div className="flex items-center gap-2 text-xs text-foreground/50">
+                  <h4 className="truncate font-display font-bold text-white">{clickedRepo.name}</h4>
+                  <div className="flex items-center gap-2 text-xs text-white/50">
                     <span className="flex items-center gap-1"><Star className="h-3 w-3" /> {clickedRepo.stargazers_count}</span>
                     <span className="flex items-center gap-1"><GitFork className="h-3 w-3" /> {clickedRepo.forks_count}</span>
                     <span className="truncate">{clickedRepo.language}</span>
@@ -357,14 +357,14 @@ export function Constellation({ data }: { data: GithubData }) {
                 </div>
               </div>
               {clickedRepo.description && (
-                <p className="mt-3 line-clamp-3 text-sm text-foreground/70">{clickedRepo.description}</p>
+                <p className="mt-3 line-clamp-3 text-sm text-white/70">{clickedRepo.description}</p>
               )}
               <div className="mt-4">
                 <a
                   href={clickedRepo.html_url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-white/10 py-2.5 text-xs font-bold text-foreground transition-colors hover:bg-white/20"
+                  className="flex w-full items-center justify-center gap-1.5 rounded-xl bg-white/10 py-2.5 text-xs font-bold text-white transition-colors hover:bg-white/20"
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> View on GitHub
                 </a>
@@ -379,7 +379,7 @@ export function Constellation({ data }: { data: GithubData }) {
         <button
           onClick={() => setActiveLang(null)}
           className={`rounded-full border px-3 py-1 transition ${
-            !activeLang ? "border-border bg-white/15 text-foreground" : "border-border bg-white/5 text-foreground/60 hover:bg-white/10"
+            !activeLang ? "border-white/20 bg-white/15 text-white" : "border-white/10 bg-white/5 text-white/60 hover:bg-white/10"
           }`}
         >
           All
@@ -391,18 +391,18 @@ export function Constellation({ data }: { data: GithubData }) {
               key={l}
               onClick={() => setActiveLang(active ? null : l)}
               className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition ${
-                active ? "border-border bg-white/15 text-foreground" : "border-border bg-white/5 text-foreground/70 hover:bg-white/10"
+                active ? "border-white/20 bg-white/15 text-white" : "border-white/10 bg-white/5 text-white/70 hover:bg-white/10"
               }`}
             >
               <span className="h-2 w-2 rounded-full" style={{ background: colorFor(l), boxShadow: `0 0 8px ${colorFor(l)}` }} />
               <span className="font-medium">{l}</span>
-              <span className="text-foreground/40">{n}</span>
+              <span className="text-white/40">{n}</span>
             </button>
           );
         })}
       </div>
 
-      <p className="relative mt-3 px-1 text-[11px] text-foreground/40">
+      <p className="relative mt-3 px-1 text-[11px] text-white/40">
         Tip: hover a star for details · click to open repo popup · use +/− or scroll to zoom.
       </p>
     </div>
