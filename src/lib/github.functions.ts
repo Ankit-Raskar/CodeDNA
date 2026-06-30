@@ -11,6 +11,7 @@ export type GhUser = {
   followers: number;
   following: number;
   public_repos: number;
+  public_gists: number;
   created_at: string;
   html_url: string;
 };

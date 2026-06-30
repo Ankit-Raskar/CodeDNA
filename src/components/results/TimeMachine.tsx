@@ -5,7 +5,7 @@ import { calcLevel, topLanguages } from "@/lib/personality";
 
 export function TimeMachine({ data }: { data: GithubData }) {
   const currentLevel = calcLevel(data);
-  const futureLevel = currentLevel + 12;
+  const futureLevel = currentLevel.level + 12;
   const futureRepos = Math.floor(data.totals.repos * 1.4 + 5);
   const topLangs = topLanguages(data.languageBytes, 3);
   
