@@ -27,7 +27,7 @@ function Feature({ icon, title, sub, i }: { icon: React.ReactNode; title: string
       whileHover={{ y: -4 }}
       className="card-soft rounded-3xl p-6"
     >
-      <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl grad-primary text-white shadow-lg">{icon}</div>
+      <div className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-2xl grad-primary text-foreground shadow-lg">{icon}</div>
       <h3 className="font-display text-lg font-bold">{title}</h3>
       <p className="mt-1 text-sm text-muted-foreground">{sub}</p>
     </motion.div>
@@ -45,21 +45,21 @@ function HeroDecorations() {
       <motion.div
         animate={{ y: [0, -30, 0], x: [0, 10, 0], rotate: [0, 5, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute left-[10%] top-[20%] text-white/5 text-8xl md:left-[15%] md:top-[30%]"
+        className="absolute left-[10%] top-[20%] text-foreground/5 text-8xl md:left-[15%] md:top-[30%]"
       >
         <FiGithub />
       </motion.div>
       <motion.div
         animate={{ y: [0, 40, 0], x: [0, -15, 0], rotate: [0, -10, 0] }}
         transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-        className="absolute right-[5%] top-[15%] text-white/5 text-6xl md:right-[20%] md:top-[25%]"
+        className="absolute right-[5%] top-[15%] text-foreground/5 text-6xl md:right-[20%] md:top-[25%]"
       >
         <FiTerminal />
       </motion.div>
       <motion.div
         animate={{ y: [0, -20, 0], rotate: [0, 15, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute left-[20%] bottom-[30%] text-white/5 text-5xl md:left-[25%] md:bottom-[20%]"
+        className="absolute left-[20%] bottom-[30%] text-foreground/5 text-5xl md:left-[25%] md:bottom-[20%]"
       >
         <FiGithub />
       </motion.div>

@@ -40,23 +40,23 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
       <div className="relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">Developer Class</p>
-          <h3 className="mt-2 font-display text-4xl font-black text-white drop-shadow-lg md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">{archetype}</h3>
-          <p className="mt-3 text-sm font-medium text-white/60"><AnimatedCounter value={xp} /> XP earned</p>
+          <h3 className="mt-2 font-display text-4xl font-black text-foreground drop-shadow-lg md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">{archetype}</h3>
+          <p className="mt-3 text-sm font-medium text-foreground/60"><AnimatedCounter value={xp} /> XP earned</p>
         </div>
         <motion.div 
           whileHover={{ scale: 1.05, rotate: 5 }}
-          className="relative grid h-32 w-32 place-items-center rounded-3xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-white shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20"
+          className="relative grid h-32 w-32 place-items-center rounded-3xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-foreground shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20"
         >
           <div className="absolute inset-0 rounded-3xl bg-black/20" />
           <div className="relative text-center leading-none">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-white/80">Level</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/80">Level</p>
             <p className="font-display text-5xl font-black drop-shadow-md">{level}</p>
           </div>
         </motion.div>
       </div>
 
       <div className="relative z-10 mt-10">
-        <div className="mb-3 flex justify-between text-xs font-bold uppercase tracking-wider text-white/70">
+        <div className="mb-3 flex justify-between text-xs font-bold uppercase tracking-wider text-foreground/70">
           <span>Level {level}</span>
           <span>Level {level + 1}</span>
         </div>
@@ -79,7 +79,7 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
       </div>
 
       <div className="relative z-10 mt-12">
-        <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-white/70">Achievements</p>
+        <p className="mb-5 text-xs font-bold uppercase tracking-[0.2em] text-foreground/70">Achievements</p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {achievements.map((a, i) => (
             <motion.div
@@ -91,12 +91,12 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
               whileHover={{ y: -5, scale: 1.02 }}
               className={`group flex items-center gap-4 rounded-2xl border p-4 text-sm transition-all duration-300 ${a.earned ? "border-amber-400/30 bg-gradient-to-br from-amber-500/10 to-transparent shadow-[0_10px_30px_-10px_rgba(251,191,36,0.3)] backdrop-blur-sm" : "border-white/5 bg-white/5 opacity-50 grayscale"}`}
             >
-              <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-xl transition-transform duration-500 group-hover:rotate-12 ${a.earned ? "bg-gradient-to-br from-amber-300 to-orange-500 text-white shadow-lg border border-white/20" : "bg-black/40 text-white/30 border border-white/10"}`}>
+              <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-xl transition-transform duration-500 group-hover:rotate-12 ${a.earned ? "bg-gradient-to-br from-amber-300 to-orange-500 text-foreground shadow-lg border border-white/20" : "bg-black/40 text-foreground/30 border border-white/10"}`}>
                 🏆
               </div>
               <div className="min-w-0 flex-1">
-                <p className={`truncate font-bold ${a.earned ? "text-amber-100" : "text-white/50"}`}>{a.name}</p>
-                <p className={`truncate text-xs mt-0.5 ${a.earned ? "text-amber-200/70" : "text-white/30"}`}>{a.description}</p>
+                <p className={`truncate font-bold ${a.earned ? "text-amber-100" : "text-foreground/50"}`}>{a.name}</p>
+                <p className={`truncate text-xs mt-0.5 ${a.earned ? "text-amber-200/70" : "text-foreground/30"}`}>{a.description}</p>
               </div>
             </motion.div>
           ))}

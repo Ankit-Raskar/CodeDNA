@@ -42,7 +42,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
         >
           <div className="absolute inset-0 z-0 bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2}, ${r.color})` }} />
           
-          <div className="relative z-10 overflow-hidden rounded-[36px] bg-slate-950 p-8 text-white md:p-12 border border-white/10" style={{ transform: "translateZ(30px)" }}>
+          <div className="relative z-10 overflow-hidden rounded-[36px] bg-background p-8 text-foreground md:p-12 border border-white/10" style={{ transform: "translateZ(30px)" }}>
             
             {/* Interactive glare */}
             <motion.div 
@@ -77,7 +77,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
             />
 
             <div className="relative z-10 flex items-start justify-between gap-4" style={{ transform: "translateZ(20px)" }}>
-              <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-white/70">
+              <p className="text-[11px] font-bold uppercase tracking-[0.35em] text-foreground/70">
                 Your archetype · unlocked
               </p>
               <motion.span
@@ -85,7 +85,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                 whileInView={{ scale: 1, rotate: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4, type: "spring", stiffness: 140 }}
-                className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-[0.25em] text-white shadow-xl border border-white/20"
+                className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-[0.25em] text-foreground shadow-xl border border-white/20"
                 style={{
                   background: `linear-gradient(135deg, ${r.color}, ${archetype.color2})`,
                   boxShadow: `0 0 30px ${r.glow}`,
@@ -121,7 +121,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.45, duration: 0.5 }}
-                  className="font-display text-5xl font-black leading-tight text-white drop-shadow-lg md:text-7xl"
+                  className="font-display text-5xl font-black leading-tight text-foreground drop-shadow-lg md:text-7xl"
                 >
                   {archetype.name}
                 </motion.h2>
@@ -130,19 +130,19 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.6 }}
-                  className="mt-4 text-xl italic text-white/90 drop-shadow-md md:text-2xl"
+                  className="mt-4 text-xl italic text-foreground/90 drop-shadow-md md:text-2xl"
                 >
                   &ldquo;{archetype.tagline}&rdquo;
                 </motion.p>
-                <p className="mt-3 text-base text-white/70 leading-relaxed max-w-lg">{archetype.description}</p>
+                <p className="mt-3 text-base text-foreground/70 leading-relaxed max-w-lg">{archetype.description}</p>
               </div>
             </div>
 
             {/* Power meter */}
             <div className="relative z-10 mt-12" style={{ transform: "translateZ(20px)" }}>
-              <div className="flex items-center justify-between text-sm font-bold uppercase tracking-widest text-white/80">
+              <div className="flex items-center justify-between text-sm font-bold uppercase tracking-widest text-foreground/80">
                 <span>Power level</span>
-                <span className="text-white drop-shadow-md">{archetype.power} / 100</span>
+                <span className="text-foreground drop-shadow-md">{archetype.power} / 100</span>
               </div>
               <div className="mt-3 h-3.5 overflow-hidden rounded-full bg-black/40 border border-white/10 shadow-inner">
                 <motion.div
@@ -168,7 +168,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
             {/* Class unlocks */}
             {archetype.unlocked.length > 0 && (
               <div className="relative z-10 mt-10" style={{ transform: "translateZ(30px)" }}>
-                <p className="text-[11px] font-bold uppercase tracking-widest text-white/60 mb-4">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-foreground/60 mb-4">
                   Classes unlocked
                 </p>
                 <div className="flex flex-wrap gap-3">
@@ -179,7 +179,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.9 + i * 0.1, type: "spring", stiffness: 200 }}
-                      className="rounded-full border border-white/30 bg-gradient-to-r from-white/10 to-transparent px-4 py-2 text-sm font-bold text-white shadow-lg backdrop-blur-md"
+                      className="rounded-full border border-white/30 bg-gradient-to-r from-white/10 to-transparent px-4 py-2 text-sm font-bold text-foreground shadow-lg backdrop-blur-md"
                     >
                       <span className="text-cyan-400 mr-1">✦</span> {u}
                     </motion.span>

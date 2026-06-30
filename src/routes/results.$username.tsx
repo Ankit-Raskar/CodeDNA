@@ -114,7 +114,7 @@ function Results() {
     return (
       <main className="flex min-h-screen items-center justify-center px-6">
         <div className="card-soft max-w-md rounded-3xl p-10 text-center">
-          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl grad-primary text-3xl text-white shadow">
+          <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl grad-primary text-3xl text-foreground shadow">
             {is404 ? "🔍" : "⚠️"}
           </div>
           <h1 className="font-display text-2xl font-bold">
@@ -124,7 +124,7 @@ function Results() {
             {is404 ? `No GitHub user called @${username}.` : "Something went wrong. Try again."}
           </p>
           <div className="mt-6 flex flex-wrap justify-center gap-2">
-            <Link to="/" className="inline-flex items-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-white">
+            <Link to="/" className="inline-flex items-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-foreground">
               <FiArrowLeft /> Back home
             </Link>
           </div>
@@ -162,7 +162,7 @@ function Results() {
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6 relative z-10">
         <Link to="/" className="flex items-center gap-2 text-sm group">
           <span className="grid h-8 w-8 place-items-center rounded-xl bg-white/10 text-base shadow-inner transition-all group-hover:bg-white/20">🧬</span>
-          <span className="font-display font-bold tracking-wider text-white">CodeDNA</span>
+          <span className="font-display font-bold tracking-wider text-foreground">CodeDNA</span>
         </Link>
         <div className="flex flex-1 items-center justify-end gap-3">
           <div className="hidden w-full max-w-md md:block">
@@ -171,7 +171,7 @@ function Results() {
           <Link
             to="/compare"
             search={{ a: username, b: "" }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-white hover:bg-white/20 backdrop-blur-md transition-all shadow-lg"
+            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-foreground hover:bg-white/20 backdrop-blur-md transition-all shadow-lg"
           >
             ⚔ Compare
           </Link>
@@ -195,7 +195,7 @@ function Results() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 2, duration: 1 }}
-            className="absolute -bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/50"
+            className="absolute -bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-foreground/50"
           >
             <span className="text-[10px] font-bold uppercase tracking-widest">Scroll to explore</span>
             <motion.div 
@@ -270,7 +270,7 @@ function Results() {
           ) : (
             <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f172a]/60 p-8 shadow-2xl backdrop-blur-xl md:p-12 text-center">
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="mx-auto w-12 h-12 text-3xl mb-4">🧠</motion.div>
-              <p className="text-white/70 font-semibold tracking-wider uppercase text-sm">Consulting AI Mentor...</p>
+              <p className="text-foreground/70 font-semibold tracking-wider uppercase text-sm">Consulting AI Mentor...</p>
             </div>
           )}
         </ScrollSection>
@@ -313,7 +313,7 @@ function Results() {
         )}
       </motion.div>
 
-      <footer className="mx-auto mt-32 max-w-7xl px-6 text-center text-xs font-bold uppercase tracking-widest text-white/30 pb-10">
+      <footer className="mx-auto mt-32 max-w-7xl px-6 text-center text-xs font-bold uppercase tracking-widest text-foreground/30 pb-10">
         Data from GitHub · Insights by Groq · Built with TanStack Start
       </footer>
     </main>

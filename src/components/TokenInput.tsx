@@ -185,7 +185,7 @@ export function TokenInput({
                     </button>
                     <button
                       onClick={() => { setEditing(true); setValue(""); setState("idle"); setMsg(null); }}
-                      className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700"
+                      className="inline-flex items-center justify-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-foreground hover:bg-emerald-700"
                     >
                       <FiRefreshCw /> Replace Token
                     </button>
@@ -231,7 +231,7 @@ export function TokenInput({
                       type="button"
                       onClick={validateAndSave}
                       disabled={state === "checking"}
-                      className="inline-flex items-center justify-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg disabled:opacity-60"
+                      className="inline-flex items-center justify-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-foreground shadow-lg disabled:opacity-60"
                     >
                       {state === "checking" ? (<><FiRefreshCw className="h-4 w-4 animate-spin" /> Checking…</>) : (<><FiCheck className="h-4 w-4" /> Connect</>)}
                     </button>
@@ -283,13 +283,13 @@ export function TokenInput({
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, y: -6 }}
                     transition={{ type: "spring", stiffness: 280, damping: 18 }}
-                    className="mt-4 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 p-4 text-white shadow-lg"
+                    className="mt-4 overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 p-4 text-foreground shadow-lg"
                   >
                     <p className="flex items-center gap-2 font-display text-base font-bold">
                       <motion.span animate={{ rotate: [0, -15, 15, 0] }} transition={{ duration: 0.7 }}>🎉</motion.span>
                       GitHub Token Connected Successfully!
                     </p>
-                    <p className="mt-1 text-xs text-white/90">
+                    <p className="mt-1 text-xs text-foreground/90">
                       Your API limit has increased to approximately 5,000 requests per hour.
                     </p>
                   </motion.div>

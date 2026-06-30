@@ -46,7 +46,7 @@ ${data.repos.slice(0, 5).map(r => `- **${r.name}** (${r.stargazers_count} stars)
           </button>
           <button 
             onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-foreground rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
           >
             <FiPrinter /> Save as PDF
           </button>

@@ -44,7 +44,7 @@ export function RateLimitModal({
               <FiX />
             </button>
 
-            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl grad-primary text-3xl text-white shadow-lg">
+            <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl grad-primary text-3xl text-foreground shadow-lg">
               ⏳
             </div>
             <h2 className="text-center font-display text-2xl font-bold">GitHub API Limit Reached</h2>
@@ -64,7 +64,7 @@ export function RateLimitModal({
               {!hasToken && (
                 <button
                   onClick={onAddToken}
-                  className="inline-flex items-center justify-center gap-2 rounded-full grad-primary px-5 py-3 text-sm font-semibold text-white shadow-lg"
+                  className="inline-flex items-center justify-center gap-2 rounded-full grad-primary px-5 py-3 text-sm font-semibold text-foreground shadow-lg"
                 >
                   <FiKey /> Add Personal Token
                 </button>

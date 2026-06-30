@@ -20,9 +20,9 @@ function Bubble({ side, children, delay }: { side: "left" | "right"; children: R
       className={`flex items-end gap-3 ${side === "right" ? "flex-row-reverse" : ""}`}
     >
       {side === "left" && (
-        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl grad-primary text-white shadow">🤖</div>
+        <div className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl grad-primary text-foreground shadow">🤖</div>
       )}
-      <div className={`max-w-2xl rounded-3xl px-5 py-4 text-sm leading-relaxed shadow-sm ${side === "left" ? "rounded-bl-md bg-white border border-border" : "rounded-br-md grad-primary text-white"}`}>
+      <div className={`max-w-2xl rounded-3xl px-5 py-4 text-sm leading-relaxed shadow-sm ${side === "left" ? "rounded-bl-md bg-white border border-border" : "rounded-br-md grad-primary text-foreground"}`}>
         {children}
       </div>
     </motion.div>

@@ -37,7 +37,7 @@ export function TimeMachine({ data }: { data: GithubData }) {
           whileInView={{ rotate: 0, opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 1, type: "spring" }}
-          className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-lg mb-6"
+          className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-foreground shadow-lg mb-6"
         >
           <FiClock className="h-8 w-8" />
         </motion.div>
@@ -76,7 +76,7 @@ export function TimeMachine({ data }: { data: GithubData }) {
             initial={{ x: 30, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
-            className="flex flex-col gap-4 bg-slate-900 rounded-3xl p-6 shadow-xl text-white border border-slate-800"
+            className="flex flex-col gap-4 bg-card rounded-3xl p-6 shadow-xl text-foreground border border-slate-800"
           >
             <div className="flex items-center gap-3 text-cyan-400 mb-2">
               <FiZap className="h-6 w-6" />

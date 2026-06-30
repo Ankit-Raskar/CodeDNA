@@ -56,7 +56,7 @@ export function ArchetypeRevealOverlay({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-slate-950 text-white"
+          className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-background text-foreground"
         >
           {/* Radial backdrop pulse */}
           <motion.div
@@ -92,7 +92,7 @@ export function ArchetypeRevealOverlay({
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.45 }}
-              className="text-sm text-white/60"
+              className="text-sm text-foreground/60"
             >
               @{username}
             </motion.p>
@@ -136,7 +136,7 @@ export function ArchetypeRevealOverlay({
                     boxShadow: `0 30px 80px ${r.glow}, 0 0 60px ${r.glow}`,
                   }}
                 >
-                  <div className="relative flex h-full w-full flex-col items-center justify-between rounded-[26px] bg-slate-950 p-6">
+                  <div className="relative flex h-full w-full flex-col items-center justify-between rounded-[26px] bg-background p-6">
                     {/* Holographic shine */}
                     <motion.div
                       aria-hidden
@@ -149,7 +149,7 @@ export function ArchetypeRevealOverlay({
                           "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)",
                       }}
                     />
-                    <div className="z-10 flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.25em] text-white/70">
+                    <div className="z-10 flex w-full items-center justify-between text-[10px] font-bold uppercase tracking-[0.25em] text-foreground/70">
                       <span>codeDNA</span>
                       <span style={{ color: r.color }}>{r.label}</span>
                     </div>
@@ -189,14 +189,14 @@ export function ArchetypeRevealOverlay({
                         initial={{ opacity: 0 }}
                         animate={flipped ? { opacity: 1 } : {}}
                         transition={{ delay: 1.7 }}
-                        className="mt-3 text-xs italic text-white/70"
+                        className="mt-3 text-xs italic text-foreground/70"
                       >
                         &ldquo;{archetype.tagline}&rdquo;
                       </motion.p>
                     </div>
 
                     <div className="z-10 w-full">
-                      <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-white/60">
+                      <div className="flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-foreground/60">
                         <span>Power</span>
                         <span>{archetype.power}/100</span>
                       </div>
@@ -235,7 +235,7 @@ export function ArchetypeRevealOverlay({
               animate={flipped ? { opacity: 1 } : {}}
               transition={{ delay: 2.4 }}
               onClick={close}
-              className="mt-3 text-[11px] uppercase tracking-widest text-white/40 hover:text-white/70"
+              className="mt-3 text-[11px] uppercase tracking-widest text-foreground/40 hover:text-foreground/70"
             >
               Skip
             </motion.button>

@@ -83,7 +83,7 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
           whileTap={{ scale: 0.97 }}
           type="submit"
           aria-label="Search GitHub User"
-          className="glow-primary grad-primary flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white"
+          className="glow-primary grad-primary flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-foreground"
         >
           <FiZap className="h-4 w-4" /> {compact ? "Decode" : "Decode My DNA"}
         </motion.button>

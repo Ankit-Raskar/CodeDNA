@@ -40,7 +40,7 @@ function List({ items, color }: { items: string[]; color: string }) {
           className="flex items-start gap-3 text-sm rounded-lg bg-white/5 p-2.5 border border-white/5 backdrop-blur-md"
         >
           <span className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.5)]" style={{ background: color }} />
-          <span className="text-white/90 leading-tight">{s}</span>
+          <span className="text-foreground/90 leading-tight">{s}</span>
         </motion.li>
       ))}
     </ul>
@@ -94,8 +94,8 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
           <div className="absolute inset-0 rounded-2xl border border-white/20"></div>
         </div>
         <div>
-          <p className="font-display text-lg font-black tracking-tight text-white">AI Mentor</p>
-          <p className="text-xs font-medium text-white/50 tracking-wider uppercase">Trained on your code</p>
+          <p className="font-display text-lg font-black tracking-tight text-foreground">AI Mentor</p>
+          <p className="text-xs font-medium text-foreground/50 tracking-wider uppercase">Trained on your code</p>
         </div>
         <span className="ml-auto inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-400">
           <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" /> Online
@@ -114,7 +114,7 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
               className={`flex items-end gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}
             >
               <div
-                className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-white shadow-xl ${
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-foreground shadow-xl ${
                   m.role === "user" ? "bg-white/10 backdrop-blur-md" : "bg-gradient-to-br from-fuchsia-500 to-indigo-600"
                 }`}
               >
@@ -123,8 +123,8 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
               <div
                 className={`max-w-[85%] rounded-[24px] px-5 py-4 text-[15px] shadow-lg backdrop-blur-md ${
                   m.role === "user"
-                    ? "rounded-br-sm bg-indigo-500/20 border border-indigo-500/30 text-white"
-                    : "rounded-bl-sm border border-white/10 bg-white/5 text-white/90"
+                    ? "rounded-br-sm bg-indigo-500/20 border border-indigo-500/30 text-foreground"
+                    : "rounded-bl-sm border border-white/10 bg-white/5 text-foreground/90"
                 }`}
               >
                 <p className="leading-relaxed">{m.text}</p>
@@ -140,7 +140,7 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
               exit={{ opacity: 0, scale: 0.9 }}
               className="flex items-end gap-3"
             >
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-fuchsia-500 to-indigo-600 border border-white/10 text-white shadow-xl">🧠</div>
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-fuchsia-500 to-indigo-600 border border-white/10 text-foreground shadow-xl">🧠</div>
               <div className="flex gap-1.5 rounded-[24px] rounded-bl-sm border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md">
                 {[0, 1, 2].map((i) => (
                   <motion.span
@@ -162,7 +162,7 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
           <button
             key={s}
             onClick={() => ask(s)}
-            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-white/70 transition-all hover:border-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300"
+            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-foreground/70 transition-all hover:border-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300"
           >
             {s}
           </button>
@@ -181,11 +181,11 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask your mentor anything…"
-          className="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[15px] text-white placeholder-white/30 outline-none transition-colors focus:border-indigo-500 focus:bg-white/10"
+          className="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[15px] text-foreground placeholder-white/30 outline-none transition-colors focus:border-indigo-500 focus:bg-white/10"
         />
         <button
           type="submit"
-          className="group relative grid h-12 w-12 shrink-0 place-items-center rounded-full bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all disabled:opacity-50 hover:bg-indigo-400 hover:scale-105"
+          className="group relative grid h-12 w-12 shrink-0 place-items-center rounded-full bg-indigo-500 text-foreground shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all disabled:opacity-50 hover:bg-indigo-400 hover:scale-105"
           disabled={!input.trim()}
         >
           <FiSend className="h-5 w-5 -ml-0.5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />

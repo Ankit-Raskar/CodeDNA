@@ -30,7 +30,8 @@ export function QuizModal({
     }
     sessionStorage.setItem(key, "1");
     setOpen(true);
-  }, [username, onComplete]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username]);
 
   const handleSelect = (id: string) => {
     setSelected(id);
@@ -49,7 +50,7 @@ export function QuizModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.4 }}
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-6"
+          className="fixed inset-0 z-[110] flex items-center justify-center bg-background/80 backdrop-blur-md p-6"
         >
           <motion.div
             initial={{ scale: 0.9, y: 20 }}

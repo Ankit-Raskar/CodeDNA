@@ -46,7 +46,7 @@ function UserInput({
       className="card-soft relative flex items-center gap-3 overflow-hidden rounded-[24px] p-2 pr-3 bg-white/70 backdrop-blur-xl border border-white focus-within:border-indigo-400 focus-within:shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-all"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 pointer-events-none" />
-      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-800 to-black text-lg font-black text-white shadow-md">
+      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-800 to-black text-lg font-black text-foreground shadow-md">
         {side}
       </span>
       <FiGithub className="relative shrink-0 text-slate-400 text-lg" />
@@ -59,7 +59,7 @@ function UserInput({
       />
       <button 
         type="submit"
-        className="relative shrink-0 rounded-[14px] bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+        className="relative shrink-0 rounded-[14px] bg-card px-5 py-2.5 text-sm font-bold text-foreground shadow-lg transition-transform hover:scale-105 active:scale-95"
       >
         Lock In
       </button>
@@ -125,7 +125,7 @@ function BattleCard({
         boxShadow: `0 40px 100px -20px ${r.glow}`,
       }}
     >
-      <div className="relative h-full w-full overflow-hidden rounded-[37px] bg-[#090b14] p-6 text-white md:p-8 custom-scrollbar">
+      <div className="relative h-full w-full overflow-hidden rounded-[37px] bg-[#090b14] p-6 text-foreground md:p-8 custom-scrollbar">
         {/* Dynamic Highlight overlay */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-50 mix-blend-overlay opacity-40 transition-opacity duration-300"
@@ -154,7 +154,7 @@ function BattleCard({
         />
 
         <div className="relative flex items-center justify-between">
-          <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white/80 backdrop-blur-md">
+          <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-foreground/80 backdrop-blur-md">
             Fighter {side}
           </span>
           <span
@@ -179,7 +179,7 @@ function BattleCard({
           </div>
           <div className="mt-2 w-full min-w-0">
             <p className="truncate font-display text-3xl font-black">{data.user.name || data.user.login}</p>
-            <p className="truncate text-sm text-white/50 tracking-wider">@{data.user.login}</p>
+            <p className="truncate text-sm text-foreground/50 tracking-wider">@{data.user.login}</p>
             <div className="mx-auto mt-4 inline-flex items-center gap-3 rounded-[16px] border border-white/10 bg-white/5 p-1.5 pr-4 backdrop-blur-sm">
               <span
                 className="grid h-10 w-10 place-items-center rounded-xl text-2xl shadow-inner"
@@ -187,7 +187,7 @@ function BattleCard({
               >
                 {archetype.emoji}
               </span>
-              <span className="text-sm font-black uppercase tracking-widest text-white/90">{archetype.name}</span>
+              <span className="text-sm font-black uppercase tracking-widest text-foreground/90">{archetype.name}</span>
             </div>
           </div>
         </div>
@@ -199,13 +199,13 @@ function BattleCard({
           ].map((s) => (
             <div key={s.l} className="rounded-[20px] border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
               <div className="text-2xl font-black">{s.v}</div>
-              <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">{s.l}</div>
+              <div className="mt-1 text-[10px] uppercase tracking-widest text-foreground/50">{s.l}</div>
             </div>
           ))}
         </div>
 
         <div className="relative mt-6 rounded-[20px] border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
-          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] text-white/70">
+          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] text-foreground/70">
             <span>Power Level</span><span>{archetype.power}/100</span>
           </div>
           <div className="mt-3 h-3 overflow-hidden rounded-full bg-black/40 shadow-inner">
@@ -222,11 +222,11 @@ function BattleCard({
         </div>
 
         <div className="relative mt-6">
-          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Weapon of Choice</p>
+          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">Weapon of Choice</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2">
             {top.map((l) => (
-              <span key={l.name} className="rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-[11px] font-medium text-white/80 shadow-sm">
-                {l.name} <span className="text-white/40">· {l.pct}%</span>
+              <span key={l.name} className="rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-[11px] font-medium text-foreground/80 shadow-sm">
+                {l.name} <span className="text-foreground/40">· {l.pct}%</span>
               </span>
             ))}
           </div>
@@ -322,7 +322,7 @@ function ComparePage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.3, type: "spring" }}
-            className="grid h-14 w-14 place-items-center justify-self-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-black uppercase text-white shadow-[0_0_30px_rgba(99,102,241,0.5)] border-4 border-white"
+            className="grid h-14 w-14 place-items-center justify-self-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-black uppercase text-foreground shadow-[0_0_30px_rgba(99,102,241,0.5)] border-4 border-white"
           >
             VS
           </motion.div>
@@ -409,18 +409,18 @@ function ComparePage() {
                   </div>
                 ) : (
                   <div
-                    className="relative overflow-hidden rounded-[40px] px-16 py-12 text-center text-white shadow-[0_30px_60px_rgba(0,0,0,0.3)] transition-transform hover:scale-105"
+                    className="relative overflow-hidden rounded-[40px] px-16 py-12 text-center text-foreground shadow-[0_30px_60px_rgba(0,0,0,0.3)] transition-transform hover:scale-105"
                     style={{
                       background: `linear-gradient(135deg, ${(overall === "a" ? archA : archB)!.color}, ${(overall === "a" ? archA : archB)!.color2})`,
                     }}
                   >
                     <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
                     <div className="relative z-10">
-                      <p className="text-[12px] font-black uppercase tracking-[0.4em] text-white/70">Absolute Victory</p>
+                      <p className="text-[12px] font-black uppercase tracking-[0.4em] text-foreground/70">Absolute Victory</p>
                       <p className="mt-2 font-display text-6xl font-black tracking-tight drop-shadow-xl">
                         @{overall === "a" ? qa.data!.user.login : qb.data!.user.login}
                       </p>
-                      <p className="mt-4 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold text-white backdrop-blur-md">
+                      <p className="mt-4 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold text-foreground backdrop-blur-md">
                         Won {Math.max(winsA, winsB)} of {stats.length} categories
                       </p>
                     </div>
@@ -432,14 +432,14 @@ function ComparePage() {
                 <Link
                   to="/results/$username"
                   params={{ username: qa.data!.user.login }}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-card px-6 py-3.5 text-sm font-bold text-foreground shadow-lg transition-transform hover:scale-105"
                 >
                   View @{qa.data!.user.login} <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   to="/results/$username"
                   params={{ username: qb.data!.user.login }}
-                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-card px-6 py-3.5 text-sm font-bold text-foreground shadow-lg transition-transform hover:scale-105"
                 >
                   View @{qb.data!.user.login} <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                 </Link>

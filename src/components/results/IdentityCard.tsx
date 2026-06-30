@@ -81,7 +81,7 @@ export function IdentityCard({ data }: { data: GithubData }) {
           }}
         />
 
-        <div className="absolute right-8 top-8 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white/70 shadow-inner backdrop-blur-md">
+        <div className="absolute right-8 top-8 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70 shadow-inner backdrop-blur-md">
           CodeDNA · 2026
         </div>
 
@@ -99,12 +99,12 @@ export function IdentityCard({ data }: { data: GithubData }) {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-4">
-              <h1 className="font-display text-4xl font-black tracking-tight text-white md:text-6xl drop-shadow-lg">{user.name || user.login}</h1>
-              <a href={user.html_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white/80 transition-all hover:bg-white/20 hover:text-white backdrop-blur-md">
+              <h1 className="font-display text-4xl font-black tracking-tight text-foreground md:text-6xl drop-shadow-lg">{user.name || user.login}</h1>
+              <a href={user.html_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-xs font-semibold text-foreground/80 transition-all hover:bg-white/20 hover:text-foreground backdrop-blur-md">
                 @{user.login} <FiExternalLink className="h-3 w-3" />
               </a>
             </div>
-            {user.bio && <p className="mt-4 max-w-2xl text-lg text-white/70 leading-relaxed font-medium drop-shadow-sm" style={{ transform: "translateZ(30px)" }}>{user.bio}</p>}
+            {user.bio && <p className="mt-4 max-w-2xl text-lg text-foreground/70 leading-relaxed font-medium drop-shadow-sm" style={{ transform: "translateZ(30px)" }}>{user.bio}</p>}
             
             <div className="mt-8 flex flex-wrap gap-3" style={{ transform: "translateZ(20px)" }}>
               {user.location && <Tag icon={<FiMapPin />}>{user.location}</Tag>}
@@ -122,7 +122,7 @@ export function IdentityCard({ data }: { data: GithubData }) {
 
 function Tag({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f172a]/80 px-4 py-2 text-sm font-semibold text-white/90 shadow-lg backdrop-blur-md transition-all hover:bg-white/10">
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f172a]/80 px-4 py-2 text-sm font-semibold text-foreground/90 shadow-lg backdrop-blur-md transition-all hover:bg-white/10">
       <span className="text-cyan-400">{icon}</span> 
       <span>{children}</span>
     </span>

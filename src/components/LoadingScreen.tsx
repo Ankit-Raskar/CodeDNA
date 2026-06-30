@@ -76,7 +76,7 @@ export function LoadingScreen({ username }: { username: string }) {
   }, []);
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 text-white">
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background text-foreground">
       <div className="pointer-events-none absolute inset-0 opacity-60">
         <DNABackground density={1.6} />
       </div>
@@ -164,7 +164,7 @@ export function LoadingScreen({ username }: { username: string }) {
             @{username}
           </span>
         </h2>
-        <p className="mt-2 text-sm text-white/60">Reading the developer genome — this takes a few seconds.</p>
+        <p className="mt-2 text-sm text-foreground/60">Reading the developer genome — this takes a few seconds.</p>
 
         <div className="mt-10 h-14">
           <AnimatePresence mode="wait">
@@ -180,7 +180,7 @@ export function LoadingScreen({ username }: { username: string }) {
                 <span className="text-2xl">{STEPS[step].emoji}</span>
                 <span>{STEPS[step].text}</span>
               </div>
-              <p className="text-xs text-white/50">{STEPS[step].sub}</p>
+              <p className="text-xs text-foreground/50">{STEPS[step].sub}</p>
             </motion.div>
           </AnimatePresence>
         </div>
@@ -208,7 +208,7 @@ export function LoadingScreen({ username }: { username: string }) {
           />
           <div className="absolute inset-0 shine opacity-40" />
         </div>
-        <div className="mt-2 text-right text-[10px] font-mono uppercase tracking-widest text-white/40">
+        <div className="mt-2 text-right text-[10px] font-mono uppercase tracking-widest text-foreground/40">
           {Math.round(progress * 100).toString().padStart(2, "0")}% · stage {step + 1}/{STEPS.length}
         </div>
       </div>

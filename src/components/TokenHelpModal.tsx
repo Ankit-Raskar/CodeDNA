@@ -39,7 +39,7 @@ export function TokenHelpModal({ open, onClose }: { open: boolean; onClose: () =
               <FiX />
             </button>
 
-            <div className="mb-1 inline-flex h-11 w-11 items-center justify-center rounded-2xl grad-primary text-xl text-white shadow-lg">
+            <div className="mb-1 inline-flex h-11 w-11 items-center justify-center rounded-2xl grad-primary text-xl text-foreground shadow-lg">
               🔑
             </div>
             <h2 className="font-display text-2xl font-bold">How to create a GitHub Personal Access Token</h2>
@@ -50,7 +50,7 @@ export function TokenHelpModal({ open, onClose }: { open: boolean; onClose: () =
             <ol className="mt-5 space-y-3">
               {STEPS.map((s, i) => (
                 <li key={i} className="flex gap-3 rounded-2xl bg-secondary/60 p-3">
-                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full grad-primary text-xs font-bold text-white">
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full grad-primary text-xs font-bold text-foreground">
                     {i + 1}
                   </span>
                   <div>
@@ -66,7 +66,7 @@ export function TokenHelpModal({ open, onClose }: { open: boolean; onClose: () =
                 href="https://github.com/settings/tokens/new?description=CodeDNA&scopes="
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-white shadow-lg"
+                className="inline-flex items-center gap-2 rounded-full grad-primary px-5 py-2.5 text-sm font-semibold text-foreground shadow-lg"
               >
                 Create token on GitHub <FiExternalLink className="h-3.5 w-3.5" />
               </a>

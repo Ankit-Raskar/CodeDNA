@@ -94,8 +94,8 @@ export function Wrapped({ data }: { data: GithubData }) {
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className={
             fs
-              ? `relative aspect-[9/16] h-[min(90vh,800px)] w-auto overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-white shadow-2xl`
-              : `relative aspect-[9/14] max-h-[78vh] overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-white shadow-[0_30px_80px_rgba(0,0,0,0.5)] md:aspect-[16/10]`
+              ? `relative aspect-[9/16] h-[min(90vh,800px)] w-auto overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-foreground shadow-2xl`
+              : `relative aspect-[9/14] max-h-[78vh] overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-foreground shadow-[0_30px_80px_rgba(0,0,0,0.5)] md:aspect-[16/10]`
           }
         >
           {/* Animated Blob Backgrounds */}
@@ -129,7 +129,7 @@ export function Wrapped({ data }: { data: GithubData }) {
               transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
               className="mb-auto mt-16"
             >
-              <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.4em] text-white backdrop-blur-md md:text-sm border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.4em] text-foreground backdrop-blur-md md:text-sm border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 {s.eyebrow}
               </span>
             </motion.div>
@@ -149,18 +149,18 @@ export function Wrapped({ data }: { data: GithubData }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="mt-6 text-2xl font-bold text-white/90 drop-shadow-md md:text-4xl"
+              className="mt-6 text-2xl font-bold text-foreground/90 drop-shadow-md md:text-4xl"
             >
               {s.sub}
             </motion.p>
 
             <div className="mt-8 flex items-center justify-between border-t border-white/20 pt-6">
-              <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-white/60">
+              <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-foreground/60">
                 codeDNA · {i + 1}/{slides.length}
               </p>
               <button
                 onClick={() => setPaused((p) => !p)}
-                className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-white backdrop-blur-md transition-all hover:bg-white/30 hover:scale-110 border border-white/20"
+                className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-foreground backdrop-blur-md transition-all hover:bg-white/30 hover:scale-110 border border-white/20"
                 aria-label={paused ? "Play" : "Pause"}
               >
                 {paused ? <FiPlay className="ml-1 h-5 w-5" /> : <FiPause className="h-5 w-5" />}
@@ -170,10 +170,10 @@ export function Wrapped({ data }: { data: GithubData }) {
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-white transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-left-20" : "left-0 md:-left-7"}`}>
+      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-left-20" : "left-0 md:-left-7"}`}>
         <FiChevronLeft className="h-6 w-6" />
       </button>
-      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-white transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-right-20" : "right-0 md:-right-7"}`}>
+      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-right-20" : "right-0 md:-right-7"}`}>
         <FiChevronRight className="h-6 w-6" />
       </button>
 
@@ -208,11 +208,11 @@ export function Wrapped({ data }: { data: GithubData }) {
             <button
               onClick={() => setFs(false)}
               aria-label="Close"
-              className="absolute right-8 top-8 z-[130] grid h-14 w-14 place-items-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:bg-white/20 hover:scale-110 border border-white/20"
+              className="absolute right-8 top-8 z-[130] grid h-14 w-14 place-items-center rounded-full bg-white/10 text-foreground backdrop-blur-xl transition-all hover:bg-white/20 hover:scale-110 border border-white/20"
             >
               <FiX className="h-6 w-6" />
             </button>
-            <p className="absolute bottom-8 left-1/2 z-[130] -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
+            <p className="absolute bottom-8 left-1/2 z-[130] -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.4em] text-foreground/50">
               ← → navigate · space pause · esc close
             </p>
             {SlideCanvas}

@@ -44,7 +44,7 @@ export function AIFeedback({ insights }: { insights: AIInsights }) {
             onClick={() => setMode("roast")}
             className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${
               mode === "roast" 
-                ? "bg-rose-500 text-white shadow-md" 
+                ? "bg-rose-500 text-foreground shadow-md" 
                 : "text-slate-500 hover:text-slate-800"
             }`}
           >
@@ -54,7 +54,7 @@ export function AIFeedback({ insights }: { insights: AIInsights }) {
             onClick={() => setMode("encourage")}
             className={`px-6 py-2 rounded-full font-bold text-sm transition-all ${
               mode === "encourage" 
-                ? "bg-indigo-500 text-white shadow-md" 
+                ? "bg-indigo-500 text-foreground shadow-md" 
                 : "text-slate-500 hover:text-slate-800"
             }`}
           >

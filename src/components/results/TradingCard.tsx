@@ -119,7 +119,7 @@ export function TradingCard({
             }}
           >
             <div
-              className="relative h-full w-full overflow-hidden rounded-[24px] text-white"
+              className="relative h-full w-full overflow-hidden rounded-[24px] text-foreground"
               style={{
                 backgroundImage: `radial-gradient(circle at 30% 0%, ${archetype.color}cc, transparent 55%), radial-gradient(circle at 80% 100%, ${archetype.color2}cc, transparent 55%), linear-gradient(160deg, #0F172A, #1E1B4B)`,
               }}
@@ -142,7 +142,7 @@ export function TradingCard({
 
               {/* Header */}
               <div className="relative flex items-center justify-between p-5">
-                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/80">
+                <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-foreground/80">
                   🧬 CodeDNA
                 </span>
                 <span
@@ -180,7 +180,7 @@ export function TradingCard({
               {/* Name/Class */}
               <div className="relative mt-4 px-5 text-center" style={{ transform: "translateZ(30px)" }}>
                 <p className="font-display text-xl font-black leading-tight">{data.user.name || data.user.login}</p>
-                <p className="text-[11px] text-white/70">@{data.user.login}</p>
+                <p className="text-[11px] text-foreground/70">@{data.user.login}</p>
                 <p
                   className="mt-3 font-display text-2xl font-black"
                   style={{
@@ -204,7 +204,7 @@ export function TradingCard({
 
               {/* Languages */}
               <div className="relative mx-5 mt-3">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-white/60">Top stack</p>
+                <p className="text-[9px] font-bold uppercase tracking-widest text-foreground/60">Top stack</p>
                 <div className="mt-1.5 flex flex-wrap gap-1">
                   {langs.map((l) => (
                     <span key={l.name} className="rounded-full bg-white/15 px-2 py-0.5 text-[10px] font-semibold backdrop-blur">
@@ -216,9 +216,9 @@ export function TradingCard({
 
               {/* Move / tagline */}
               <div className="absolute inset-x-5 bottom-4">
-                <p className="text-[9px] font-bold uppercase tracking-widest text-white/60">Signature move</p>
-                <p className="mt-1 line-clamp-2 text-xs italic text-white/90">&ldquo;{insights.tagline}&rdquo;</p>
-                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-white/50">
+                <p className="text-[9px] font-bold uppercase tracking-widest text-foreground/60">Signature move</p>
+                <p className="mt-1 line-clamp-2 text-xs italic text-foreground/90">&ldquo;{insights.tagline}&rdquo;</p>
+                <div className="mt-2 flex items-center justify-between text-[9px] font-bold uppercase tracking-widest text-foreground/50">
                   <span>codedna · {new Date().getFullYear()}</span>
                   <span>{r.label}</span>
                 </div>
@@ -230,7 +230,7 @@ export function TradingCard({
 
       <div className="mt-6 flex flex-wrap justify-center gap-3">
         <motion.button whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }} onClick={() => exportPng(false)} disabled={busy}
-          className="glow-primary grad-primary inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-white disabled:opacity-60">
+          className="glow-primary grad-primary inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-foreground disabled:opacity-60">
           <FiDownload /> {busy ? "Rendering…" : "Download card"}
         </motion.button>
         <button onClick={() => exportPng(true)} className="inline-flex items-center gap-2 rounded-full border border-border bg-white px-5 py-2.5 text-sm font-medium hover:bg-muted">
@@ -254,7 +254,7 @@ function Stat({ label, v }: { label: string; v: number }) {
   return (
     <div className="rounded-lg bg-white/15 p-1.5 backdrop-blur">
       <p className="font-display text-sm font-black">{v.toLocaleString()}</p>
-      <p className="text-[8px] font-bold uppercase tracking-widest text-white/70">{label}</p>
+      <p className="text-[8px] font-bold uppercase tracking-widest text-foreground/70">{label}</p>
     </div>
   );
 }

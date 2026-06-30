@@ -66,7 +66,7 @@ export function BadgesGrid({ badges }: { badges: Achievement[] }) {
             )}
 
             <div className="relative flex items-start gap-4">
-              <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${r.grad} text-white text-2xl shadow-lg ring-4 ${r.ring} ${r.shadow}`}>
+              <div className={`grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br ${r.grad} text-foreground text-2xl shadow-lg ring-4 ${r.ring} ${r.shadow}`}>
                 <Icon className="drop-shadow" />
               </div>
               <div className="min-w-0 flex-1">
@@ -75,7 +75,7 @@ export function BadgesGrid({ badges }: { badges: Achievement[] }) {
                     {b.name}
                   </h3>
                   {b.earned ? (
-                    <span className={`rounded-full bg-gradient-to-r ${r.grad} px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white shadow`}>{r.label}</span>
+                    <span className={`rounded-full bg-gradient-to-r ${r.grad} px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-foreground shadow`}>{r.label}</span>
                   ) : (
                     <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-slate-500">Locked</span>
                   )}

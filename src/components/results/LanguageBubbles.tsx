@@ -77,8 +77,8 @@ export function LanguageBubbles({ data }: { data: GithubData }) {
 
       <div className="relative z-10 mb-6 flex items-end justify-between">
         <div>
-          <h3 className="font-display text-2xl font-bold text-white drop-shadow-sm">Language Distribution</h3>
-          <p className="mt-1 text-sm text-white/50">
+          <h3 className="font-display text-2xl font-bold text-foreground drop-shadow-sm">Language Distribution</h3>
+          <p className="mt-1 text-sm text-foreground/50">
             A breakdown of your most actively written code.
           </p>
         </div>
@@ -87,7 +87,7 @@ export function LanguageBubbles({ data }: { data: GithubData }) {
             key={hover}
             initial={{ opacity: 0, scale: 0.9, y: -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wide text-white shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md"
+            className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wide text-foreground shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md"
           >
             {hover}
           </motion.div>

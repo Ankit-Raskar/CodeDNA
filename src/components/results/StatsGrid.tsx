@@ -72,11 +72,11 @@ function Stat({ label, value, icon, grad, i, color }: { label: string; value: st
       />
       
       <div className="relative z-10 flex flex-col items-start">
-        <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-white shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-white/20 text-xl transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110`}>
+        <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-white/20 text-xl transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110`}>
           {icon}
         </div>
-        <p className="text-xs font-bold uppercase tracking-widest text-white/50">{label}</p>
-        <p className="mt-1 font-display text-3xl font-black text-white drop-shadow-md">
+        <p className="text-xs font-bold uppercase tracking-widest text-foreground/50">{label}</p>
+        <p className="mt-1 font-display text-3xl font-black text-foreground drop-shadow-md">
           <AnimatedCounter value={isNumeric ? numValue : value} isNumber={isNumeric} />
         </p>
       </div>
