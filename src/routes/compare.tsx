@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import { useState, type ReactNode } from "react";
-import { FiArrowLeft, FiArrowRight, FiGithub } from "react-icons/fi";
+import { FiArrowLeft, FiArrowRight, FiGithub, FiCheckCircle } from "react-icons/fi";
 import { z } from "zod";
 
 import { fetchGithubProfile, type GithubData } from "@/lib/github.functions";
@@ -37,26 +37,31 @@ function useDev(username: string) {
 }
 
 function UserInput({
-  side, value, onSubmit,
-}: { side: "A" | "B"; value: string; onSubmit: (v: string) => void }) {
+  side, value, onSubmit, autoFocus = false
+}: { side: "A" | "B"; value: string; onSubmit: (v: string) => void, autoFocus?: boolean }) {
   const [v, setV] = useState(value);
   return (
     <form
       onSubmit={(e) => { e.preventDefault(); if (v.trim()) onSubmit(v.trim()); }}
-      className="card-soft flex items-center gap-2 rounded-2xl p-2"
+      className="card-soft relative flex items-center gap-3 overflow-hidden rounded-[24px] p-2 pr-3 bg-white/70 backdrop-blur-xl border border-white focus-within:border-indigo-400 focus-within:shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-all"
     >
-      <span className="grid h-9 w-9 place-items-center rounded-xl grad-primary text-sm font-black text-white">
+      <div className="absolute inset-0 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 pointer-events-none" />
+      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-800 to-black text-lg font-black text-white shadow-md">
         {side}
       </span>
-      <FiGithub className="ml-1 text-muted-foreground" />
+      <FiGithub className="relative shrink-0 text-slate-400 text-lg" />
       <input
         value={v}
         onChange={(e) => setV(e.target.value)}
-        placeholder="github username"
-        className="min-w-0 flex-1 bg-transparent px-1 py-1.5 text-sm outline-none placeholder:text-muted-foreground"
+        placeholder={`Enter Fighter ${side}...`}
+        autoFocus={autoFocus}
+        className="relative min-w-0 flex-1 bg-transparent px-1 py-2 text-[15px] font-medium text-slate-900 outline-none placeholder:text-slate-400"
       />
-      <button className="rounded-xl grad-primary px-3 py-1.5 text-xs font-bold text-white">
-        Load
+      <button 
+        type="submit"
+        className="relative shrink-0 rounded-[14px] bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105 active:scale-95"
+      >
+        Lock In
       </button>
     </form>
   );
@@ -83,103 +88,145 @@ function buildStats(a: GithubData, b: GithubData): Stat[] {
 }
 
 function BattleCard({
-  data, archetype, side,
-}: { data: GithubData; archetype: Archetype; side: "A" | "B" }) {
+  data, archetype, side, isWinner = false
+}: { data: GithubData; archetype: Archetype; side: "A" | "B", isWinner?: boolean }) {
   const r = RARITY_STYLE[archetype.rarity];
-  const top = topLanguages(data.languageBytes, 5);
+  const top = topLanguages(data.languageBytes, 4);
   const level = calcLevel(data);
+
+  // 3D Tilt Effect
+  const mouseX = useMotionValue(0.5);
+  const mouseY = useMotionValue(0.5);
+  const rotateX = useSpring(useMotionTemplate`${(mouseY.get() - 0.5) * -15}deg`, { stiffness: 300, damping: 30 });
+  const rotateY = useSpring(useMotionTemplate`${(mouseX.get() - 0.5) * 15}deg`, { stiffness: 300, damping: 30 });
+  const shineX = useSpring(useMotionTemplate`${mouseX.get() * 100}%`, { stiffness: 300, damping: 30 });
+  const shineY = useSpring(useMotionTemplate`${mouseY.get() * 100}%`, { stiffness: 300, damping: 30 });
+
   return (
     <motion.div
-      initial={{ opacity: 0, x: side === "A" ? -50 : 50 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ type: "spring", stiffness: 80, damping: 16 }}
-      className="relative overflow-hidden rounded-[32px] p-[2px]"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        mouseX.set((e.clientX - rect.left) / rect.width);
+        mouseY.set((e.clientY - rect.top) / rect.height);
+      }}
+      onMouseLeave={() => {
+        mouseX.set(0.5);
+        mouseY.set(0.5);
+      }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: "spring", stiffness: 100, damping: 20 }}
+      className={`relative z-10 w-full overflow-hidden rounded-[40px] p-[3px] transition-shadow duration-500 ${isWinner ? 'shadow-[0_0_100px_rgba(255,215,0,0.3)] z-20' : ''}`}
       style={{
+        rotateX, 
+        rotateY, 
+        perspective: 1000,
         backgroundImage: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2}, ${r.color})`,
-        boxShadow: `0 30px 80px -20px ${r.glow}`,
+        boxShadow: `0 40px 100px -20px ${r.glow}`,
       }}
     >
-      <div className="relative h-full overflow-hidden rounded-[30px] bg-slate-950 p-6 text-white md:p-8">
+      <div className="relative h-full w-full overflow-hidden rounded-[37px] bg-[#090b14] p-6 text-white md:p-8 custom-scrollbar">
+        {/* Dynamic Highlight overlay */}
+        <motion.div
+          className="pointer-events-none absolute inset-0 z-50 mix-blend-overlay opacity-40 transition-opacity duration-300"
+          style={{
+            background: useMotionTemplate`radial-gradient(circle 400px at ${shineX} ${shineY}, rgba(255,255,255,0.8), transparent 80%)`,
+          }}
+        />
+
+        {isWinner && (
+          <div className="absolute -left-10 top-6 -rotate-45 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500 px-12 py-1 text-[10px] font-black uppercase tracking-widest text-black shadow-lg z-20">
+            Winner
+          </div>
+        )}
+
         <motion.div
           aria-hidden
           initial={{ x: "-100%" }}
           animate={{ x: "200%" }}
-          transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
-          className="pointer-events-none absolute inset-y-0 w-1/2"
-          style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.12) 50%, transparent 70%)" }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+          className="pointer-events-none absolute inset-y-0 w-1/2 opacity-20"
+          style={{ background: "linear-gradient(110deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%)" }}
         />
         <div
-          className="pointer-events-none absolute -right-20 -top-20 h-60 w-60 rounded-full blur-3xl"
-          style={{ background: archetype.color, opacity: 0.4 }}
+          className="pointer-events-none absolute -right-20 -top-20 h-[300px] w-[300px] rounded-full blur-[80px]"
+          style={{ background: archetype.color, opacity: 0.3 }}
         />
 
         <div className="relative flex items-center justify-between">
-          <span className="rounded-full bg-white/10 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white/80">
+          <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white/80 backdrop-blur-md">
             Fighter {side}
           </span>
           <span
-            className="rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-widest"
+            className="rounded-full px-3 py-1.5 text-[10px] font-black uppercase tracking-widest shadow-lg"
             style={{ background: r.color, color: "#0b1020" }}
           >
-            {archetype.rarity} · {r.label}
+            {archetype.rarity}
           </span>
         </div>
 
-        <div className="relative mt-5 flex items-center gap-4">
-          <img
-            src={data.user.avatar_url}
-            alt={data.user.login}
-            className="h-20 w-20 rounded-2xl border-2 border-white/20 object-cover"
-          />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-lg font-bold">{data.user.name || data.user.login}</p>
-            <p className="truncate text-sm text-white/60">@{data.user.login}</p>
-            <div className="mt-2 flex items-center gap-2">
+        <div className="relative mt-8 flex flex-col items-center text-center gap-4">
+          <div className="relative group">
+            <div className="absolute inset-0 rounded-full blur-xl opacity-50 transition-opacity group-hover:opacity-80" style={{ background: archetype.color }}></div>
+            <img
+              src={data.user.avatar_url}
+              alt={data.user.login}
+              className="relative h-28 w-28 rounded-full border-[3px] border-white/20 object-cover shadow-2xl transition-transform duration-500 group-hover:scale-110"
+            />
+            <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full border-2 border-[#090b14] bg-slate-100 px-3 py-0.5 text-xs font-black text-slate-900 shadow-lg">
+              LVL {level.level}
+            </div>
+          </div>
+          <div className="mt-2 w-full min-w-0">
+            <p className="truncate font-display text-3xl font-black">{data.user.name || data.user.login}</p>
+            <p className="truncate text-sm text-white/50 tracking-wider">@{data.user.login}</p>
+            <div className="mx-auto mt-4 inline-flex items-center gap-3 rounded-[16px] border border-white/10 bg-white/5 p-1.5 pr-4 backdrop-blur-sm">
               <span
-                className="grid h-7 w-7 place-items-center rounded-lg text-base"
+                className="grid h-10 w-10 place-items-center rounded-xl text-2xl shadow-inner"
                 style={{ background: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2})` }}
               >
                 {archetype.emoji}
               </span>
-              <span className="text-sm font-bold">{archetype.name}</span>
+              <span className="text-sm font-black uppercase tracking-widest text-white/90">{archetype.name}</span>
             </div>
           </div>
         </div>
 
-        <div className="relative mt-5 grid grid-cols-3 gap-2 text-center">
+        <div className="relative mt-8 grid grid-cols-2 gap-3 text-center">
           {[
-            { l: "LVL", v: level.level },
-            { l: "★", v: data.totals.stars.toLocaleString() },
-            { l: "REPOS", v: data.totals.repos },
+            { l: "★ Stars", v: data.totals.stars.toLocaleString() },
+            { l: "📦 Repos", v: data.totals.repos },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl bg-white/5 p-3">
-              <div className="text-xl font-black">{s.v}</div>
-              <div className="text-[9px] uppercase tracking-widest text-white/50">{s.l}</div>
+            <div key={s.l} className="rounded-[20px] border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
+              <div className="text-2xl font-black">{s.v}</div>
+              <div className="mt-1 text-[10px] uppercase tracking-widest text-white/50">{s.l}</div>
             </div>
           ))}
         </div>
 
-        <div className="relative mt-4">
-          <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-widest text-white/60">
-            <span>Power</span><span>{archetype.power}/100</span>
+        <div className="relative mt-6 rounded-[20px] border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+          <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] text-white/70">
+            <span>Power Level</span><span>{archetype.power}/100</span>
           </div>
-          <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-white/10">
+          <div className="mt-3 h-3 overflow-hidden rounded-full bg-black/40 shadow-inner">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${archetype.power}%` }}
-              transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-              className="h-full rounded-full"
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="relative h-full rounded-full"
               style={{ background: `linear-gradient(90deg, ${archetype.color}, ${r.color})` }}
-            />
+            >
+              <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+            </motion.div>
           </div>
         </div>
 
-        <div className="relative mt-4">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-white/50">Top languages</p>
-          <div className="mt-2 flex flex-wrap gap-1.5">
+        <div className="relative mt-6">
+          <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Weapon of Choice</p>
+          <div className="mt-3 flex flex-wrap justify-center gap-2">
             {top.map((l) => (
-              <span key={l.name} className="rounded-full bg-white/10 px-2 py-0.5 text-[11px]">
-                {l.name} · {l.pct}%
+              <span key={l.name} className="rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-[11px] font-medium text-white/80 shadow-sm">
+                {l.name} <span className="text-white/40">· {l.pct}%</span>
               </span>
             ))}
           </div>
@@ -189,30 +236,35 @@ function BattleCard({
   );
 }
 
-function StatLine({ s }: { s: Stat }) {
+function StatLine({ s, delay }: { s: Stat, delay: number }) {
   const winA = s.winner === "a";
   const winB = s.winner === "b";
   return (
-    <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 border-b border-border/40 py-3 last:border-b-0">
-      <div className={`text-right text-xl font-black tabular-nums md:text-2xl ${winA ? "text-foreground" : "text-muted-foreground/60"}`}>
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay, duration: 0.4 }}
+      className="grid grid-cols-[1fr_auto_1fr] items-center gap-4 border-b border-border/40 py-4 last:border-b-0 hover:bg-muted/20 rounded-xl px-2 transition-colors"
+    >
+      <div className={`flex items-center justify-end gap-3 text-right text-xl font-black tabular-nums md:text-3xl ${winA ? "text-slate-900" : "text-slate-300"}`}>
+        {winA && <FiCheckCircle className="text-emerald-500 h-5 w-5 shrink-0" />}
         {s.a}
-        {winA && <span className="ml-2 inline-block rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-600">+1</span>}
       </div>
-      <div className="text-center text-[10px] font-bold uppercase tracking-[0.25em] text-muted-foreground">
+      <div className="w-24 text-center text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
         {s.label}
       </div>
-      <div className={`text-left text-xl font-black tabular-nums md:text-2xl ${winB ? "text-foreground" : "text-muted-foreground/60"}`}>
-        {winB && <span className="mr-2 inline-block rounded-full bg-emerald-500/15 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-widest text-emerald-600">+1</span>}
+      <div className={`flex items-center justify-start gap-3 text-left text-xl font-black tabular-nums md:text-3xl ${winB ? "text-slate-900" : "text-slate-300"}`}>
         {s.b}
+        {winB && <FiCheckCircle className="text-emerald-500 h-5 w-5 shrink-0" />}
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function StatusCard({ children }: { children: ReactNode }) {
+function StatusCard({ children, bg = "bg-white/50" }: { children: ReactNode, bg?: string }) {
   return (
-    <div className="card-soft grid min-h-[420px] place-items-center rounded-[32px] p-10 text-center text-sm text-muted-foreground">
-      {children}
+    <div className={`card-soft flex min-h-[500px] flex-col items-center justify-center rounded-[40px] border border-white p-10 text-center shadow-xl backdrop-blur-xl ${bg}`}>
+      <div className="text-sm font-bold tracking-widest text-slate-400 uppercase">{children}</div>
     </div>
   );
 }
@@ -223,8 +275,8 @@ function ComparePage() {
   const qa = useDev(a);
   const qb = useDev(b);
 
-  const setA = (v: string) => navigate({ search: (p: { a?: string; b?: string }) => ({ ...p, a: v }) });
-  const setB = (v: string) => navigate({ search: (p: { a?: string; b?: string }) => ({ ...p, b: v }) });
+  const setA = (v: string) => navigate({ search: (p) => ({ ...p, a: v }) });
+  const setB = (v: string) => navigate({ search: (p) => ({ ...p, b: v }) });
 
   const archA = qa.data ? computeArchetype(qa.data) : null;
   const archB = qb.data ? computeArchetype(qb.data) : null;
@@ -235,67 +287,85 @@ function ComparePage() {
   const overall = winsA === winsB ? "tie" : winsA > winsB ? "a" : "b";
 
   return (
-    <main className="relative min-h-screen overflow-hidden pb-24">
-      <DNABackground density={0.8} />
+    <main className="relative min-h-screen w-full overflow-hidden pb-32">
+      <DNABackground density={1.2} />
 
-      <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6">
-        <Link to="/" className="flex items-center gap-2 text-sm">
-          <FiArrowLeft />
-          <span className="font-display font-bold">CodeDNA</span>
+      <nav className="relative z-50 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6 md:px-12 md:py-8">
+        <Link to="/" className="group flex items-center gap-3 text-sm transition-opacity hover:opacity-70">
+          <div className="grid h-10 w-10 place-items-center rounded-full border border-slate-200 bg-white shadow-sm transition-transform group-hover:-translate-x-1">
+            <FiArrowLeft className="text-slate-600" />
+          </div>
+          <span className="font-display text-lg font-black tracking-tight text-slate-900">CodeDNA</span>
         </Link>
-        <span className="rounded-full border border-border bg-white/70 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+        <span className="rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-600 shadow-sm">
           ⚔ Battle Mode
         </span>
       </nav>
 
-      <section className="relative z-10 mx-auto max-w-5xl px-6 text-center">
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="font-display text-5xl font-black md:text-7xl"
+      <section className="relative z-10 mx-auto mt-4 max-w-6xl px-6 text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.6, type: "spring" }}
         >
-          Developer <span className="text-gradient">Battle</span>
-        </motion.h1>
-        <p className="mt-3 text-muted-foreground">
-          Pit two GitHub profiles head-to-head. Whose chronicle wins?
-        </p>
+          <h1 className="font-display text-6xl font-black tracking-tight md:text-[5.5rem] leading-[0.9]">
+            Developer <br className="md:hidden" /><span className="text-gradient">Showdown</span>
+          </h1>
+          <p className="mx-auto mt-6 max-w-xl text-lg font-medium text-slate-500">
+            Pit two GitHub profiles head-to-head to see whose chronicle is superior.
+          </p>
+        </motion.div>
 
-        <div className="mt-8 grid gap-3 md:grid-cols-[1fr_auto_1fr] md:items-center">
-          <UserInput side="A" value={a} onSubmit={setA} />
-          <div className="grid h-12 w-12 place-items-center justify-self-center rounded-full bg-slate-900 text-sm font-black uppercase text-white shadow-lg">
+        <div className="mx-auto mt-12 grid max-w-4xl gap-6 md:grid-cols-[1fr_auto_1fr] md:items-center">
+          <UserInput side="A" value={a} onSubmit={setA} autoFocus={!a} />
+          <motion.div 
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ delay: 0.3, type: "spring" }}
+            className="grid h-14 w-14 place-items-center justify-self-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 text-lg font-black uppercase text-white shadow-[0_0_30px_rgba(99,102,241,0.5)] border-4 border-white"
+          >
             VS
-          </div>
-          <UserInput side="B" value={b} onSubmit={setB} />
+          </motion.div>
+          <UserInput side="B" value={b} onSubmit={setB} autoFocus={!!a && !b} />
         </div>
 
         {(!a || !b) && (
-          <p className="mt-4 text-xs text-muted-foreground">
-            Try: <button onClick={() => { setA("gaearon"); setB("torvalds"); }} className="font-bold text-foreground underline-offset-2 hover:underline">gaearon vs torvalds</button>
-          </p>
+          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="mt-8 text-[13px] font-semibold text-slate-400">
+            Need an example? <button onClick={() => { setA("gaearon"); setB("torvalds"); }} className="text-indigo-500 hover:text-indigo-600 underline decoration-indigo-200 underline-offset-4 transition-colors">gaearon vs torvalds</button>
+          </motion.p>
         )}
       </section>
 
-      <section className="relative z-10 mx-auto mt-12 grid max-w-6xl gap-6 px-6 md:grid-cols-2">
-        <div>
+      <section className="relative z-10 mx-auto mt-16 grid max-w-[1400px] gap-8 px-6 md:grid-cols-2 lg:gap-12 lg:px-12">
+        <div className="relative">
           {!a ? (
-            <StatusCard>Enter a username on the left to summon Fighter A.</StatusCard>
+            <StatusCard bg="bg-white/40">Select Fighter A</StatusCard>
           ) : qa.isLoading ? (
-            <StatusCard>Summoning @{a}…</StatusCard>
+            <StatusCard bg="bg-white/80">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-200 border-t-indigo-600 mx-auto mb-4" />
+              Summoning @{a}…
+            </StatusCard>
           ) : qa.isError || !qa.data ? (
-            <StatusCard>Couldn&apos;t find @{a}.</StatusCard>
+            <StatusCard bg="bg-red-50/50">Couldn&apos;t find @{a}. Typo?</StatusCard>
           ) : (
-            <BattleCard data={qa.data} archetype={archA!} side="A" />
+            <BattleCard data={qa.data} archetype={archA!} side="A" isWinner={overall === "a"} />
           )}
         </div>
-        <div>
+        
+        <div className="relative hidden md:block lg:hidden h-full w-px bg-border/50 absolute left-1/2 -translate-x-1/2" />
+
+        <div className="relative">
           {!b ? (
-            <StatusCard>Enter a username on the right to summon Fighter B.</StatusCard>
+            <StatusCard bg="bg-white/40">Select Fighter B</StatusCard>
           ) : qb.isLoading ? (
-            <StatusCard>Summoning @{b}…</StatusCard>
+            <StatusCard bg="bg-white/80">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600 mx-auto mb-4" />
+              Summoning @{b}…
+            </StatusCard>
           ) : qb.isError || !qb.data ? (
-            <StatusCard>Couldn&apos;t find @{b}.</StatusCard>
+            <StatusCard bg="bg-red-50/50">Couldn&apos;t find @{b}. Typo?</StatusCard>
           ) : (
-            <BattleCard data={qb.data} archetype={archB!} side="B" />
+            <BattleCard data={qb.data} archetype={archB!} side="B" isWinner={overall === "b"} />
           )}
         </div>
       </section>
@@ -303,67 +373,75 @@ function ComparePage() {
       <AnimatePresence>
         {stats && (
           <motion.section
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="relative z-10 mx-auto mt-10 max-w-4xl px-6"
+            transition={{ delay: 0.4, type: "spring", stiffness: 80 }}
+            className="relative z-10 mx-auto mt-20 max-w-5xl px-6"
           >
-            <div className="card-soft rounded-[32px] p-6 md:p-10">
-              <div className="mb-4 flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground">
-                  Stat-by-stat
+            <div className="card-soft relative overflow-hidden rounded-[40px] border border-white bg-white/70 p-8 shadow-2xl backdrop-blur-2xl md:p-14">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/30 via-transparent to-purple-50/30 pointer-events-none" />
+              
+              <div className="relative mb-12 flex flex-col items-center justify-center gap-2">
+                <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-400">
+                  Tale of the Tape
                 </p>
-                <div className="text-xs font-bold">
-                  {winsA} <span className="text-muted-foreground">vs</span> {winsB}
+                <div className="flex items-center gap-6 rounded-full border border-slate-200 bg-white px-6 py-2 shadow-sm">
+                  <span className={`text-xl font-black ${overall === 'a' ? 'text-indigo-600' : 'text-slate-400'}`}>{winsA}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-slate-300">Score</span>
+                  <span className={`text-xl font-black ${overall === 'b' ? 'text-purple-600' : 'text-slate-400'}`}>{winsB}</span>
                 </div>
               </div>
-              <div>
-                {stats.map((s) => <StatLine key={s.label} s={s} />)}
+
+              <div className="relative">
+                {stats.map((s, i) => <StatLine key={s.label} s={s} delay={0.5 + i * 0.1} />)}
               </div>
 
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.8, type: "spring", stiffness: 120 }}
-                className="mt-8 grid place-items-center"
+                transition={{ delay: 1.5, type: "spring", stiffness: 120 }}
+                className="relative z-20 mt-16 grid place-items-center"
               >
                 {overall === "tie" ? (
-                  <div className="rounded-2xl border border-border bg-muted px-5 py-3 text-center">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Result</p>
-                    <p className="text-2xl font-black">It&apos;s a tie 🤝</p>
+                  <div className="rounded-[32px] border border-slate-200 bg-white px-12 py-8 text-center shadow-xl">
+                    <p className="text-[12px] font-black uppercase tracking-widest text-slate-400">Result</p>
+                    <p className="mt-2 font-display text-4xl font-black text-slate-900">It&apos;s a Draw 🤝</p>
                   </div>
                 ) : (
                   <div
-                    className="rounded-2xl px-6 py-4 text-center text-white shadow-xl"
+                    className="relative overflow-hidden rounded-[40px] px-16 py-12 text-center text-white shadow-[0_30px_60px_rgba(0,0,0,0.3)] transition-transform hover:scale-105"
                     style={{
                       background: `linear-gradient(135deg, ${(overall === "a" ? archA : archB)!.color}, ${(overall === "a" ? archA : archB)!.color2})`,
                     }}
                   >
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Winner</p>
-                    <p className="mt-1 text-3xl font-black">
-                      @{overall === "a" ? qa.data!.user.login : qb.data!.user.login}
-                    </p>
-                    <p className="mt-1 text-xs text-white/80">
-                      Took {Math.max(winsA, winsB)} of {stats.length} stats
-                    </p>
+                    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                    <div className="relative z-10">
+                      <p className="text-[12px] font-black uppercase tracking-[0.4em] text-white/70">Absolute Victory</p>
+                      <p className="mt-2 font-display text-6xl font-black tracking-tight drop-shadow-xl">
+                        @{overall === "a" ? qa.data!.user.login : qb.data!.user.login}
+                      </p>
+                      <p className="mt-4 inline-block rounded-full bg-white/20 px-4 py-1.5 text-xs font-bold text-white backdrop-blur-md">
+                        Won {Math.max(winsA, winsB)} of {stats.length} categories
+                      </p>
+                    </div>
                   </div>
                 )}
               </motion.div>
 
-              <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <div className="relative mt-12 flex flex-col md:flex-row flex-wrap justify-center gap-4">
                 <Link
                   to="/results/$username"
                   params={{ username: qa.data!.user.login }}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-4 py-2 text-xs font-bold hover:bg-muted"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
                 >
-                  @{qa.data!.user.login} chronicle <FiArrowRight />
+                  View @{qa.data!.user.login} <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   to="/results/$username"
                   params={{ username: qb.data!.user.login }}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white px-4 py-2 text-xs font-bold hover:bg-muted"
+                  className="group inline-flex items-center justify-center gap-2 rounded-full bg-slate-900 px-6 py-3.5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-105"
                 >
-                  @{qb.data!.user.login} chronicle <FiArrowRight />
+                  View @{qb.data!.user.login} <FiArrowRight className="transition-transform group-hover:translate-x-1" />
                 </Link>
               </div>
             </div>

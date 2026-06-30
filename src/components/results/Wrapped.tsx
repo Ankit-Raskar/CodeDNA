@@ -4,7 +4,7 @@ import { FiChevronLeft, FiChevronRight, FiPause, FiPlay, FiMaximize2, FiX } from
 import type { GithubData } from "@/lib/github.functions";
 import { topLanguages } from "@/lib/personality";
 
-type Slide = { eyebrow: string; big: string; sub: string; emoji: string; grad: string };
+type Slide = { eyebrow: string; big: string; sub: string; emoji: string; bgClass: string };
 
 function buildSlides(data: GithubData): Slide[] {
   const year = new Date().getFullYear();
@@ -22,15 +22,15 @@ function buildSlides(data: GithubData): Slide[] {
   const starsThisYear = thisYearRepos.reduce((s, r) => s + r.stargazers_count, 0);
 
   return [
-    { eyebrow: "This year", big: `${thisYearRepos.length}`, sub: `repositories created in ${year}`, emoji: "📦", grad: "from-indigo-500 via-purple-500 to-pink-500" },
-    { eyebrow: "Favorite language", big: lang?.name || "—", sub: `${lang?.pct ?? 0}% of your code`, emoji: "💻", grad: "from-cyan-500 via-blue-500 to-indigo-600" },
-    { eyebrow: "Active days", big: `${activeDays}`, sub: `days you pushed code`, emoji: "📅", grad: "from-emerald-400 via-teal-500 to-cyan-500" },
-    { eyebrow: "Most productive month", big: bestMonth, sub: `you shipped the most then`, emoji: "🔥", grad: "from-orange-500 via-red-500 to-pink-500" },
-    { eyebrow: "Stars earned", big: (starsThisYear || data.totals.stars).toLocaleString(), sub: "stars on your work", emoji: "⭐", grad: "from-amber-400 via-orange-500 to-rose-500" },
+    { eyebrow: "This year", big: `${thisYearRepos.length}`, sub: `repositories created in ${year}`, emoji: "📦", bgClass: "from-blue-600 via-indigo-800 to-purple-900" },
+    { eyebrow: "Favorite language", big: lang?.name || "—", sub: `${lang?.pct ?? 0}% of your code`, emoji: "💻", bgClass: "from-fuchsia-600 via-pink-700 to-rose-900" },
+    { eyebrow: "Active days", big: `${activeDays}`, sub: `days you pushed code`, emoji: "📅", bgClass: "from-emerald-500 via-teal-700 to-cyan-900" },
+    { eyebrow: "Most productive month", big: bestMonth, sub: `you shipped the most then`, emoji: "🔥", bgClass: "from-orange-500 via-red-700 to-rose-900" },
+    { eyebrow: "Stars earned", big: (starsThisYear || data.totals.stars).toLocaleString(), sub: "stars on your work", emoji: "⭐", bgClass: "from-amber-400 via-yellow-600 to-orange-800" },
   ];
 }
 
-const SLIDE_MS = 4200;
+const SLIDE_MS = 5000;
 
 export function Wrapped({ data }: { data: GithubData }) {
   const slides = buildSlides(data);
@@ -74,11 +74,11 @@ export function Wrapped({ data }: { data: GithubData }) {
   const SlideCanvas = (
     <div className={fs ? "relative h-full w-full max-w-[min(720px,90vw)]" : "relative mx-auto max-w-3xl"}>
       {/* Stories-style progress bars */}
-      <div className={`absolute inset-x-6 z-10 flex gap-1.5 ${fs ? "top-6" : "top-4"}`}>
+      <div className={`absolute inset-x-6 z-20 flex gap-2 ${fs ? "top-8" : "top-6"}`}>
         {slides.map((_, j) => (
-          <div key={j} className="h-1 flex-1 overflow-hidden rounded-full bg-white/25">
+          <div key={j} className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/20 backdrop-blur-sm">
             <div
-              className="h-full rounded-full bg-white transition-[width]"
+              className="h-full rounded-full bg-white transition-[width] ease-linear"
               style={{ width: j < i ? "100%" : j === i ? `${progress * 100}%` : "0%" }}
             />
           </div>
@@ -90,45 +90,57 @@ export function Wrapped({ data }: { data: GithubData }) {
           key={i}
           initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.96 }}
-          transition={{ duration: 0.5 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
           className={
             fs
-              ? `relative aspect-[9/16] h-[min(90vh,800px)] w-auto overflow-hidden rounded-[36px] bg-gradient-to-br ${s.grad} p-10 text-white shadow-2xl`
-              : `relative aspect-[9/14] max-h-[78vh] overflow-hidden rounded-[36px] bg-gradient-to-br ${s.grad} p-8 text-white shadow-2xl md:aspect-[16/10] md:p-16`
+              ? `relative aspect-[9/16] h-[min(90vh,800px)] w-auto overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-white shadow-2xl`
+              : `relative aspect-[9/14] max-h-[78vh] overflow-hidden rounded-[40px] bg-gradient-to-br ${s.bgClass} text-white shadow-[0_30px_80px_rgba(0,0,0,0.5)] md:aspect-[16/10]`
           }
         >
+          {/* Animated Blob Backgrounds */}
+          <motion.div
+            className="absolute -top-[30%] -left-[30%] w-[160%] h-[160%] rounded-full opacity-60 mix-blend-overlay"
+            style={{
+              background: `radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%)`,
+            }}
+            animate={{
+              rotate: [0, 90, 180, 270, 360],
+              scale: [1, 1.1, 1, 1.2, 1],
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          />
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+
           <motion.div
             key={`emoji-${i}`}
-            initial={{ scale: 0.6, opacity: 0, rotate: -8 }}
-            animate={{ scale: 1, opacity: 0.18, rotate: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="pointer-events-none absolute -right-12 -top-16 text-[18rem] leading-none md:-right-8 md:-top-8"
+            initial={{ scale: 0, opacity: 0, rotate: -45 }}
+            animate={{ scale: 1, opacity: 0.15, rotate: 0 }}
+            transition={{ duration: 1.2, type: "spring", bounce: 0.4 }}
+            className="pointer-events-none absolute -right-12 -top-12 text-[22rem] leading-none drop-shadow-2xl md:-right-8 md:-top-8"
           >
             {s.emoji}
           </motion.div>
-          <motion.div
-            className="pointer-events-none absolute -bottom-16 -left-16 h-72 w-72 rounded-full bg-white/15 blur-3xl"
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 4, repeat: Infinity }}
-          />
 
-          <div className="relative flex h-full flex-col justify-end">
-            <motion.p
-              key={`e-${i}`}
-              initial={{ opacity: 0, y: 20 }}
+          <div className="relative z-10 flex h-full flex-col justify-end p-8 md:p-14">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-xs font-bold uppercase tracking-[0.4em] text-white/80 md:text-sm"
+              transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
+              className="mb-auto mt-16"
             >
-              {s.eyebrow}
-            </motion.p>
+              <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.4em] text-white backdrop-blur-md md:text-sm border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                {s.eyebrow}
+              </span>
+            </motion.div>
+
             <motion.p
               key={`big-${i}`}
-              initial={{ scale: 0.7, opacity: 0, y: 30 }}
+              initial={{ scale: 0.8, opacity: 0, y: 40 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, type: "spring", stiffness: 120, damping: 14 }}
-              className={`mt-3 font-display font-black leading-[0.95] ${fs ? "text-[8rem] md:text-[12rem]" : "text-7xl md:text-[10rem]"}`}
+              transition={{ delay: 0.4, type: "spring", stiffness: 100, damping: 15 }}
+              className={`font-display font-black leading-[0.9] tracking-tight drop-shadow-[0_10px_20px_rgba(0,0,0,0.3)] ${fs ? "text-[6rem] md:text-[9rem]" : "text-6xl md:text-[8rem]"}`}
+              style={{ textWrap: "balance" }}
             >
               {s.big}
             </motion.p>
@@ -136,46 +148,49 @@ export function Wrapped({ data }: { data: GithubData }) {
               key={`sub-${i}`}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.55 }}
-              className="mt-5 text-xl font-medium text-white/90 md:text-3xl"
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="mt-6 text-2xl font-bold text-white/90 drop-shadow-md md:text-4xl"
             >
               {s.sub}
             </motion.p>
-            <p className="mt-6 text-[10px] uppercase tracking-[0.3em] text-white/50">
-              codeDNA · {i + 1}/{slides.length}
-            </p>
 
-            <button
-              onClick={() => setPaused((p) => !p)}
-              className="absolute right-0 top-0 grid h-10 w-10 place-items-center rounded-full bg-white/15 text-white backdrop-blur hover:bg-white/25"
-              aria-label={paused ? "Play" : "Pause"}
-            >
-              {paused ? <FiPlay /> : <FiPause />}
-            </button>
+            <div className="mt-8 flex items-center justify-between border-t border-white/20 pt-6">
+              <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-white/60">
+                codeDNA · {i + 1}/{slides.length}
+              </p>
+              <button
+                onClick={() => setPaused((p) => !p)}
+                className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-white backdrop-blur-md transition-all hover:bg-white/30 hover:scale-110 border border-white/20"
+                aria-label={paused ? "Play" : "Pause"}
+              >
+                {paused ? <FiPlay className="ml-1 h-5 w-5" /> : <FiPause className="h-5 w-5" />}
+              </button>
+            </div>
           </div>
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-10 -translate-y-1/2 grid h-12 w-12 place-items-center rounded-full bg-white shadow-lg hover:bg-muted ${fs ? "-left-16" : "left-0 md:-left-6"}`}>
-        <FiChevronLeft />
+      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-white transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-left-20" : "left-0 md:-left-7"}`}>
+        <FiChevronLeft className="h-6 w-6" />
       </button>
-      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-10 -translate-y-1/2 grid h-12 w-12 place-items-center rounded-full bg-white shadow-lg hover:bg-muted ${fs ? "-right-16" : "right-0 md:-right-6"}`}>
-        <FiChevronRight />
+      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-white transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-right-20" : "right-0 md:-right-7"}`}>
+        <FiChevronRight className="h-6 w-6" />
       </button>
 
-      <button aria-label="Previous tap" onClick={() => go(-1)} className="absolute inset-y-0 left-0 z-0 w-1/3 md:hidden" />
-      <button aria-label="Next tap" onClick={() => go(1)} className="absolute inset-y-0 right-0 z-0 w-1/3 md:hidden" />
+      <button aria-label="Previous tap" onClick={() => go(-1)} className="absolute inset-y-0 left-0 z-20 w-1/3 md:hidden cursor-w-resize" />
+      <button aria-label="Next tap" onClick={() => go(1)} className="absolute inset-y-0 right-0 z-20 w-1/3 md:hidden cursor-e-resize" />
     </div>
   );
 
   return (
     <div className="relative">
-      <div className="mb-4 flex justify-center">
+      <div className="mb-8 flex justify-center">
         <button
           onClick={() => { setFs(true); setI(0); setPaused(false); }}
-          className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-5 py-2.5 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800"
+          className="group relative inline-flex items-center gap-3 overflow-hidden rounded-full bg-white px-8 py-4 text-sm font-black uppercase tracking-widest text-black shadow-[0_0_40px_rgba(255,255,255,0.3)] transition-all hover:scale-105"
         >
-          <FiMaximize2 /> Play full-screen Wrapped
+          <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 transition-opacity duration-300 group-hover:opacity-20"></div>
+          <FiMaximize2 className="h-5 w-5 transition-transform group-hover:rotate-12" /> Play Full-Screen
         </button>
       </div>
       {!fs && SlideCanvas}
@@ -184,21 +199,21 @@ export function Wrapped({ data }: { data: GithubData }) {
         {fs && (
           <motion.div
             key="fs-wrapped"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-black"
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(40px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            transition={{ duration: 0.5 }}
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80"
           >
             <button
               onClick={() => setFs(false)}
               aria-label="Close"
-              className="absolute right-5 top-5 z-[130] grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white backdrop-blur hover:bg-white/20"
+              className="absolute right-8 top-8 z-[130] grid h-14 w-14 place-items-center rounded-full bg-white/10 text-white backdrop-blur-xl transition-all hover:bg-white/20 hover:scale-110 border border-white/20"
             >
-              <FiX />
+              <FiX className="h-6 w-6" />
             </button>
-            <p className="absolute bottom-5 left-1/2 z-[130] -translate-x-1/2 text-[10px] uppercase tracking-[0.3em] text-white/40">
-              ← → arrow keys · space pause · esc close
+            <p className="absolute bottom-8 left-1/2 z-[130] -translate-x-1/2 text-[11px] font-bold uppercase tracking-[0.4em] text-white/50">
+              ← → navigate · space pause · esc close
             </p>
             {SlideCanvas}
           </motion.div>
