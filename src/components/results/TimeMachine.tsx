@@ -76,27 +76,27 @@ export function TimeMachine({ data }: { data: GithubData }) {
             initial={{ x: 30, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             viewport={{ once: true }}
-            className="flex flex-col gap-4 bg-card rounded-3xl p-6 shadow-xl text-foreground border border-slate-800"
+            className="flex flex-col gap-4 bg-muted rounded-3xl p-6 shadow-sm text-foreground border border-border"
           >
-            <div className="flex items-center gap-3 text-cyan-400 mb-2">
+            <div className="flex items-center gap-3 text-indigo-500 mb-2">
               <FiZap className="h-6 w-6" />
-              <h4 className="font-bold uppercase tracking-widest text-xs text-cyan-300">New Skills Acquired</h4>
+              <h4 className="font-bold uppercase tracking-widest text-xs text-indigo-500">New Skills Acquired</h4>
             </div>
             
             <div className="flex flex-wrap gap-2">
               {technologiesToLearn.map(tech => (
-                <span key={tech} className="px-3 py-1.5 rounded-xl bg-card border border-slate-700 text-sm font-semibold text-slate-300">
+                <span key={tech} className="px-3 py-1.5 rounded-xl bg-white border border-border text-sm font-semibold text-slate-700">
                   {tech}
                 </span>
               ))}
             </div>
 
-            <div className="mt-4 pt-4 border-t border-slate-800">
+            <div className="mt-4 pt-4 border-t border-border">
               <div className="flex items-center gap-2 mb-3">
-                <FiCode className="text-purple-400" />
-                <span className="text-xs font-bold uppercase tracking-widest text-purple-300">Suggested Project</span>
+                <FiCode className="text-purple-500" />
+                <span className="text-xs font-bold uppercase tracking-widest text-purple-500">Suggested Project</span>
               </div>
-              <p className="text-sm text-slate-400 font-medium leading-relaxed">
+              <p className="text-sm text-muted-foreground font-medium leading-relaxed">
                 A globally distributed real-time dashboard powered by AI agents, built with your top languages.
               </p>
             </div>
