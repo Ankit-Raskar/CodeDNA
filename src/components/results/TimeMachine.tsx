@@ -85,7 +85,7 @@ export function TimeMachine({ data }: { data: GithubData }) {
             
             <div className="flex flex-wrap gap-2">
               {technologiesToLearn.map(tech => (
-                <span key={tech} className="px-3 py-1.5 rounded-xl bg-slate-800 border border-slate-700 text-sm font-semibold text-slate-300">
+                <span key={tech} className="px-3 py-1.5 rounded-xl bg-card border border-slate-700 text-sm font-semibold text-slate-300">
                   {tech}
                 </span>
               ))}

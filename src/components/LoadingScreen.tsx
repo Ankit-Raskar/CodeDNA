@@ -118,7 +118,7 @@ export function LoadingScreen({ username }: { username: string }) {
         ))}
       </div>
 
-      <div className="relative z-10 mx-6 w-full max-w-2xl rounded-[36px] border border-white/10 bg-white/5 p-10 text-center shadow-2xl backdrop-blur-xl md:p-14">
+      <div className="relative z-10 mx-6 w-full max-w-2xl rounded-[36px] border border-border bg-white/5 p-10 text-center shadow-2xl backdrop-blur-xl md:p-14">
         {/* DNA helix loader */}
         <div className="relative mx-auto mb-10 h-40 w-40">
           <motion.div

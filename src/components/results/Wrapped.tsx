@@ -129,7 +129,7 @@ export function Wrapped({ data }: { data: GithubData }) {
               transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
               className="mb-auto mt-16"
             >
-              <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.4em] text-foreground backdrop-blur-md md:text-sm border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+              <span className="rounded-full bg-white/10 px-4 py-1.5 text-xs font-black uppercase tracking-[0.4em] text-foreground backdrop-blur-md md:text-sm border border-border shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                 {s.eyebrow}
               </span>
             </motion.div>
@@ -154,13 +154,13 @@ export function Wrapped({ data }: { data: GithubData }) {
               {s.sub}
             </motion.p>
 
-            <div className="mt-8 flex items-center justify-between border-t border-white/20 pt-6">
+            <div className="mt-8 flex items-center justify-between border-t border-border pt-6">
               <p className="text-[11px] font-bold uppercase tracking-[0.4em] text-foreground/60">
                 codeDNA · {i + 1}/{slides.length}
               </p>
               <button
                 onClick={() => setPaused((p) => !p)}
-                className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-foreground backdrop-blur-md transition-all hover:bg-white/30 hover:scale-110 border border-white/20"
+                className="grid h-12 w-12 place-items-center rounded-full bg-white/20 text-foreground backdrop-blur-md transition-all hover:bg-white/30 hover:scale-110 border border-border"
                 aria-label={paused ? "Play" : "Pause"}
               >
                 {paused ? <FiPlay className="ml-1 h-5 w-5" /> : <FiPause className="h-5 w-5" />}
@@ -170,10 +170,10 @@ export function Wrapped({ data }: { data: GithubData }) {
         </motion.div>
       </AnimatePresence>
 
-      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-left-20" : "left-0 md:-left-7"}`}>
+      <button onClick={() => go(-1)} aria-label="Previous" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-border shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-left-20" : "left-0 md:-left-7"}`}>
         <FiChevronLeft className="h-6 w-6" />
       </button>
-      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-right-20" : "right-0 md:-right-7"}`}>
+      <button onClick={() => go(1)} aria-label="Next" className={`absolute top-1/2 z-30 -translate-y-1/2 grid h-14 w-14 place-items-center rounded-full bg-white/10 backdrop-blur-md border border-border shadow-xl text-foreground transition-all hover:scale-110 hover:bg-white/20 ${fs ? "-right-20" : "right-0 md:-right-7"}`}>
         <FiChevronRight className="h-6 w-6" />
       </button>
 
@@ -203,12 +203,12 @@ export function Wrapped({ data }: { data: GithubData }) {
             animate={{ opacity: 1, backdropFilter: "blur(40px)" }}
             exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
             transition={{ duration: 0.5 }}
-            className="fixed inset-0 z-[120] flex items-center justify-center bg-black/80"
+            className="fixed inset-0 z-[120] flex items-center justify-center bg-card"
           >
             <button
               onClick={() => setFs(false)}
               aria-label="Close"
-              className="absolute right-8 top-8 z-[130] grid h-14 w-14 place-items-center rounded-full bg-white/10 text-foreground backdrop-blur-xl transition-all hover:bg-white/20 hover:scale-110 border border-white/20"
+              className="absolute right-8 top-8 z-[130] grid h-14 w-14 place-items-center rounded-full bg-white/10 text-foreground backdrop-blur-xl transition-all hover:bg-white/20 hover:scale-110 border border-border"
             >
               <FiX className="h-6 w-6" />
             </button>

@@ -56,7 +56,7 @@ function Stat({ label, value, icon, grad, i, color }: { label: string; value: st
       transition={{ delay: i * 0.05, type: "spring", stiffness: 100 }}
       whileHover={{ y: -5, scale: 1.02 }}
       onMouseMove={handleMouseMove}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0f172a]/60 p-6 shadow-xl backdrop-blur-xl transition-colors hover:bg-[#0f172a]/80 hover:border-white/20"
+      className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 shadow-xl backdrop-blur-xl transition-colors hover:bg-card hover:border-border"
     >
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
@@ -72,7 +72,7 @@ function Stat({ label, value, icon, grad, i, color }: { label: string; value: st
       />
       
       <div className="relative z-10 flex flex-col items-start">
-        <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-white/20 text-xl transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110`}>
+        <div className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br ${grad} text-foreground shadow-[0_0_20px_rgba(255,255,255,0.2)] border border-border text-xl transition-transform duration-300 group-hover:rotate-6 group-hover:scale-110`}>
           {icon}
         </div>
         <p className="text-xs font-bold uppercase tracking-widest text-foreground/50">{label}</p>

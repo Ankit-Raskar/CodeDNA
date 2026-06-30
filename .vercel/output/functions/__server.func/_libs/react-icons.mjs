@@ -231,6 +231,28 @@ function FiUser(props) {
 		}]
 	})(props);
 }
+function FiTrendingUp(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [{
+			"tag": "polyline",
+			"attr": { "points": "23 6 13.5 15.5 8.5 10.5 1 18" },
+			"child": []
+		}, {
+			"tag": "polyline",
+			"attr": { "points": "17 6 23 6 23 12" },
+			"child": []
+		}]
+	})(props);
+}
 function FiTrash2(props) {
 	return GenIcon({
 		"tag": "svg",
@@ -270,6 +292,75 @@ function FiTrash2(props) {
 					"y1": "11",
 					"x2": "14",
 					"y2": "17"
+				},
+				"child": []
+			}
+		]
+	})(props);
+}
+function FiTerminal(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [{
+			"tag": "polyline",
+			"attr": { "points": "4 17 10 11 4 5" },
+			"child": []
+		}, {
+			"tag": "line",
+			"attr": {
+				"x1": "12",
+				"y1": "19",
+				"x2": "20",
+				"y2": "19"
+			},
+			"child": []
+		}]
+	})(props);
+}
+function FiTarget(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [
+			{
+				"tag": "circle",
+				"attr": {
+					"cx": "12",
+					"cy": "12",
+					"r": "10"
+				},
+				"child": []
+			},
+			{
+				"tag": "circle",
+				"attr": {
+					"cx": "12",
+					"cy": "12",
+					"r": "6"
+				},
+				"child": []
+			},
+			{
+				"tag": "circle",
+				"attr": {
+					"cx": "12",
+					"cy": "12",
+					"r": "2"
 				},
 				"child": []
 			}
@@ -457,6 +548,41 @@ function FiRefreshCw(props) {
 			{
 				"tag": "path",
 				"attr": { "d": "M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" },
+				"child": []
+			}
+		]
+	})(props);
+}
+function FiPrinter(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [
+			{
+				"tag": "polyline",
+				"attr": { "points": "6 9 6 2 18 2 18 9" },
+				"child": []
+			},
+			{
+				"tag": "path",
+				"attr": { "d": "M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" },
+				"child": []
+			},
+			{
+				"tag": "rect",
+				"attr": {
+					"x": "6",
+					"y": "14",
+					"width": "12",
+					"height": "8"
+				},
 				"child": []
 			}
 		]
@@ -677,6 +803,24 @@ function FiHelpCircle(props) {
 				"child": []
 			}
 		]
+	})(props);
+}
+function FiHeart(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [{
+			"tag": "path",
+			"attr": { "d": "M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" },
+			"child": []
+		}]
 	})(props);
 }
 function FiGithub(props) {
@@ -1290,6 +1434,35 @@ function FiCalendar(props) {
 		]
 	})(props);
 }
+function FiBriefcase(props) {
+	return GenIcon({
+		"tag": "svg",
+		"attr": {
+			"viewBox": "0 0 24 24",
+			"fill": "none",
+			"stroke": "currentColor",
+			"strokeWidth": "2",
+			"strokeLinecap": "round",
+			"strokeLinejoin": "round"
+		},
+		"child": [{
+			"tag": "rect",
+			"attr": {
+				"x": "2",
+				"y": "7",
+				"width": "20",
+				"height": "14",
+				"rx": "2",
+				"ry": "2"
+			},
+			"child": []
+		}, {
+			"tag": "path",
+			"attr": { "d": "M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" },
+			"child": []
+		}]
+	})(props);
+}
 function FiAward(props) {
 	return GenIcon({
 		"tag": "svg",
@@ -1433,4 +1606,4 @@ function FiActivity(props) {
 	})(props);
 }
 //#endregion
-export { FiPlay as A, FiX as B, FiGithub as C, FiMapPin as D, FiLinkedin as E, FiShield as F, FiStar as I, FiTrash2 as L, FiSearch as M, FiSend as N, FiMaximize2 as O, FiShare2 as P, FiUser as R, FiGitPullRequest as S, FiKey as T, FiZap as V, FiDownload as _, FiAward as a, FiEyeOff as b, FiCheckCircle as c, FiChevronRight as d, FiClipboard as f, FiCpu as g, FiCopy as h, FiArrowRight as i, FiRefreshCw as j, FiPause as k, FiChevronDown as l, FiCode as m, FiAlertCircle as n, FiCalendar as o, FiClock as p, FiArrowLeft as r, FiCheck as s, FiActivity as t, FiChevronLeft as u, FiExternalLink as v, FiHelpCircle as w, FiGitBranch as x, FiEye as y, FiUsers as z };
+export { FiMaximize2 as A, FiTarget as B, FiGitPullRequest as C, FiKey as D, FiHelpCircle as E, FiSearch as F, FiUsers as G, FiTrash2 as H, FiSend as I, FiX as K, FiShare2 as L, FiPlay as M, FiPrinter as N, FiLinkedin as O, FiRefreshCw as P, FiShield as R, FiGitBranch as S, FiHeart as T, FiTrendingUp as U, FiTerminal as V, FiUser as W, FiCpu as _, FiAward as a, FiEye as b, FiCheck as c, FiChevronLeft as d, FiChevronRight as f, FiCopy as g, FiCode as h, FiArrowRight as i, FiPause as j, FiMapPin as k, FiCheckCircle as l, FiClock as m, FiAlertCircle as n, FiBriefcase as o, FiClipboard as p, FiZap as q, FiArrowLeft as r, FiCalendar as s, FiActivity as t, FiChevronDown as u, FiDownload as v, FiGithub as w, FiEyeOff as x, FiExternalLink as y, FiStar as z };

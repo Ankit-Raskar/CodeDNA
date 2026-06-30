@@ -32,7 +32,7 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
   level: number; pct: number; xp: number; achievements: Achievement[]; archetype: string;
 }) {
   return (
-    <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f172a]/80 p-8 shadow-2xl backdrop-blur-xl md:p-12">
+    <div className="relative overflow-hidden rounded-[32px] border border-border bg-card p-8 shadow-2xl backdrop-blur-xl md:p-12">
       <div className="absolute -inset-1 rounded-[32px] bg-gradient-to-br from-indigo-500/10 via-transparent to-cyan-500/10 opacity-50" />
       <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-primary/20 blur-[80px]" />
       <div className="absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-cyan-500/20 blur-[80px]" />
@@ -45,9 +45,9 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
         </div>
         <motion.div 
           whileHover={{ scale: 1.05, rotate: 5 }}
-          className="relative grid h-32 w-32 place-items-center rounded-3xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-foreground shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-white/20"
+          className="relative grid h-32 w-32 place-items-center rounded-3xl bg-gradient-to-br from-indigo-500 to-cyan-500 text-foreground shadow-[0_0_40px_rgba(99,102,241,0.5)] border border-border"
         >
-          <div className="absolute inset-0 rounded-3xl bg-black/20" />
+          <div className="absolute inset-0 rounded-3xl bg-card" />
           <div className="relative text-center leading-none">
             <p className="text-[10px] font-bold uppercase tracking-widest text-foreground/80">Level</p>
             <p className="font-display text-5xl font-black drop-shadow-md">{level}</p>
@@ -60,7 +60,7 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
           <span>Level {level}</span>
           <span>Level {level + 1}</span>
         </div>
-        <div className="relative h-4 overflow-hidden rounded-full bg-black/50 border border-white/10 shadow-inner">
+        <div className="relative h-4 overflow-hidden rounded-full bg-card border border-border shadow-inner">
           <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: `${pct}%` }}
@@ -89,9 +89,9 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, type: "spring", stiffness: 100 }}
               whileHover={{ y: -5, scale: 1.02 }}
-              className={`group flex items-center gap-4 rounded-2xl border p-4 text-sm transition-all duration-300 ${a.earned ? "border-amber-400/30 bg-gradient-to-br from-amber-500/10 to-transparent shadow-[0_10px_30px_-10px_rgba(251,191,36,0.3)] backdrop-blur-sm" : "border-white/5 bg-white/5 opacity-50 grayscale"}`}
+              className={`group flex items-center gap-4 rounded-2xl border p-4 text-sm transition-all duration-300 ${a.earned ? "border-amber-400/30 bg-gradient-to-br from-amber-500/10 to-transparent shadow-[0_10px_30px_-10px_rgba(251,191,36,0.3)] backdrop-blur-sm" : "border-border bg-white/5 opacity-50 grayscale"}`}
             >
-              <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-xl transition-transform duration-500 group-hover:rotate-12 ${a.earned ? "bg-gradient-to-br from-amber-300 to-orange-500 text-foreground shadow-lg border border-white/20" : "bg-black/40 text-foreground/30 border border-white/10"}`}>
+              <div className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl text-xl transition-transform duration-500 group-hover:rotate-12 ${a.earned ? "bg-gradient-to-br from-amber-300 to-orange-500 text-foreground shadow-lg border border-border" : "bg-card text-foreground/30 border border-border"}`}>
                 🏆
               </div>
               <div className="min-w-0 flex-1">

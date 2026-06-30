@@ -42,7 +42,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
         >
           <div className="absolute inset-0 z-0 bg-gradient-to-br" style={{ backgroundImage: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2}, ${r.color})` }} />
           
-          <div className="relative z-10 overflow-hidden rounded-[36px] bg-background p-8 text-foreground md:p-12 border border-white/10" style={{ transform: "translateZ(30px)" }}>
+          <div className="relative z-10 overflow-hidden rounded-[36px] bg-background p-8 text-foreground md:p-12 border border-border" style={{ transform: "translateZ(30px)" }}>
             
             {/* Interactive glare */}
             <motion.div 
@@ -85,7 +85,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                 whileInView={{ scale: 1, rotate: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.4, type: "spring", stiffness: 140 }}
-                className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-[0.25em] text-foreground shadow-xl border border-white/20"
+                className="rounded-full px-4 py-1.5 text-xs font-black uppercase tracking-[0.25em] text-foreground shadow-xl border border-border"
                 style={{
                   background: `linear-gradient(135deg, ${r.color}, ${archetype.color2})`,
                   boxShadow: `0 0 30px ${r.glow}`,
@@ -101,7 +101,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                 whileInView={{ scale: 1, opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
-                className="grid h-36 w-36 shrink-0 place-items-center rounded-[32px] text-8xl md:h-48 md:w-48 border-[3px] border-white/20"
+                className="grid h-36 w-36 shrink-0 place-items-center rounded-[32px] text-8xl md:h-48 md:w-48 border-[3px] border-border"
                 style={{
                   background: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2})`,
                   boxShadow: `0 25px 60px -10px ${r.glow}, inset 0 0 40px rgba(255,255,255,0.2)`,
@@ -144,7 +144,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                 <span>Power level</span>
                 <span className="text-foreground drop-shadow-md">{archetype.power} / 100</span>
               </div>
-              <div className="mt-3 h-3.5 overflow-hidden rounded-full bg-black/40 border border-white/10 shadow-inner">
+              <div className="mt-3 h-3.5 overflow-hidden rounded-full bg-card border border-border shadow-inner">
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: `${archetype.power}%` }}
@@ -179,7 +179,7 @@ export function ArchetypeReveal({ archetype }: { archetype: Archetype }) {
                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.9 + i * 0.1, type: "spring", stiffness: 200 }}
-                      className="rounded-full border border-white/30 bg-gradient-to-r from-white/10 to-transparent px-4 py-2 text-sm font-bold text-foreground shadow-lg backdrop-blur-md"
+                      className="rounded-full border border-border bg-gradient-to-r from-white/10 to-transparent px-4 py-2 text-sm font-bold text-foreground shadow-lg backdrop-blur-md"
                     >
                       <span className="text-cyan-400 mr-1">✦</span> {u}
                     </motion.span>

@@ -64,7 +64,7 @@ export function IdentityCard({ data }: { data: GithubData }) {
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
-        className="relative overflow-hidden rounded-[32px] border border-white/20 bg-[#0f172a]/60 p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] backdrop-blur-2xl md:p-12"
+        className="relative overflow-hidden rounded-[32px] border border-border bg-card p-8 shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7)] backdrop-blur-2xl md:p-12"
       >
         {/* Dynamic lighting effects */}
         <div className="absolute -inset-1 rounded-[32px] bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-50" />
@@ -81,7 +81,7 @@ export function IdentityCard({ data }: { data: GithubData }) {
           }}
         />
 
-        <div className="absolute right-8 top-8 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70 shadow-inner backdrop-blur-md">
+        <div className="absolute right-8 top-8 rounded-full border border-border bg-white/5 px-4 py-1.5 text-[10px] font-bold uppercase tracking-widest text-foreground/70 shadow-inner backdrop-blur-md">
           CodeDNA · 2026
         </div>
 
@@ -94,13 +94,13 @@ export function IdentityCard({ data }: { data: GithubData }) {
               transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
               src={user.avatar_url}
               alt={user.login}
-              className="relative h-36 w-36 rounded-3xl border-[3px] border-white/80 object-cover shadow-2xl md:h-48 md:w-48"
+              className="relative h-36 w-36 rounded-3xl border-[3px] border-border object-cover shadow-2xl md:h-48 md:w-48"
             />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-4">
               <h1 className="font-display text-4xl font-black tracking-tight text-foreground md:text-6xl drop-shadow-lg">{user.name || user.login}</h1>
-              <a href={user.html_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/10 px-4 py-1.5 text-xs font-semibold text-foreground/80 transition-all hover:bg-white/20 hover:text-foreground backdrop-blur-md">
+              <a href={user.html_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/10 px-4 py-1.5 text-xs font-semibold text-foreground/80 transition-all hover:bg-white/20 hover:text-foreground backdrop-blur-md">
                 @{user.login} <FiExternalLink className="h-3 w-3" />
               </a>
             </div>
@@ -122,7 +122,7 @@ export function IdentityCard({ data }: { data: GithubData }) {
 
 function Tag({ icon, children }: { icon: React.ReactNode; children: React.ReactNode }) {
   return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-[#0f172a]/80 px-4 py-2 text-sm font-semibold text-foreground/90 shadow-lg backdrop-blur-md transition-all hover:bg-white/10">
+    <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground/90 shadow-lg backdrop-blur-md transition-all hover:bg-white/10">
       <span className="text-cyan-400">{icon}</span> 
       <span>{children}</span>
     </span>

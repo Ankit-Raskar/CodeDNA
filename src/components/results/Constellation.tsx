@@ -79,7 +79,7 @@ export function Constellation({ data }: { data: GithubData }) {
   const topNamed = positions.slice(0, 6);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[radial-gradient(120%_90%_at_20%_0%,#1e1b4b_0%,#0b1027_45%,#05060f_100%)] p-4 text-foreground shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)] md:p-6">
+    <div className="relative overflow-hidden rounded-3xl border border-border bg-[radial-gradient(120%_90%_at_20%_0%,#1e1b4b_0%,#0b1027_45%,#05060f_100%)] p-4 text-foreground shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)] md:p-6">
       {/* Nebula clouds */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-indigo-500/25 blur-3xl animate-blob" />
@@ -146,7 +146,7 @@ export function Constellation({ data }: { data: GithubData }) {
           {({ zoomIn, zoomOut, resetTransform }) => (
             <>
               {/* Zoom Controls */}
-              <div className="absolute right-3 top-3 z-20 flex flex-col gap-1.5 rounded-xl border border-white/10 bg-black/60 p-1.5 backdrop-blur-md">
+              <div className="absolute right-3 top-3 z-20 flex flex-col gap-1.5 rounded-xl border border-border bg-card p-1.5 backdrop-blur-md">
                 <button
                   onClick={() => zoomIn()}
                   className="grid h-8 w-8 place-items-center rounded-lg bg-white/5 text-foreground/70 hover:bg-white/20 hover:text-foreground transition-colors font-bold text-lg"
@@ -312,7 +312,7 @@ export function Constellation({ data }: { data: GithubData }) {
           <motion.div
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
-            className="pointer-events-none absolute left-6 top-4 z-10 max-w-xs rounded-2xl border border-white/15 bg-background/85 p-3 backdrop-blur-md shadow-2xl"
+            className="pointer-events-none absolute left-6 top-4 z-10 max-w-xs rounded-2xl border border-border bg-background/85 p-3 backdrop-blur-md shadow-2xl"
           >
             <div className="flex items-center gap-2">
               <span className="h-2.5 w-2.5 rounded-full" style={{ background: colorFor(hover.language) }} />
@@ -335,7 +335,7 @@ export function Constellation({ data }: { data: GithubData }) {
               initial={{ opacity: 0, scale: 0.9, y: 10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 10 }}
-              className="absolute bottom-4 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-white/20 bg-card/95 p-5 shadow-2xl backdrop-blur-xl"
+              className="absolute bottom-4 left-1/2 z-50 w-full max-w-sm -translate-x-1/2 rounded-2xl border border-border bg-card/95 p-5 shadow-2xl backdrop-blur-xl"
             >
               <button
                 onClick={() => setClickedRepo(null)}
@@ -344,7 +344,7 @@ export function Constellation({ data }: { data: GithubData }) {
                 <X className="h-4 w-4" />
               </button>
               <div className="flex items-center gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 bg-white/5">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border bg-white/5">
                   <Star className="h-5 w-5 text-amber-400" />
                 </div>
                 <div className="min-w-0">
@@ -379,7 +379,7 @@ export function Constellation({ data }: { data: GithubData }) {
         <button
           onClick={() => setActiveLang(null)}
           className={`rounded-full border px-3 py-1 transition ${
-            !activeLang ? "border-white/40 bg-white/15 text-foreground" : "border-white/10 bg-white/5 text-foreground/60 hover:bg-white/10"
+            !activeLang ? "border-border bg-white/15 text-foreground" : "border-border bg-white/5 text-foreground/60 hover:bg-white/10"
           }`}
         >
           All
@@ -391,7 +391,7 @@ export function Constellation({ data }: { data: GithubData }) {
               key={l}
               onClick={() => setActiveLang(active ? null : l)}
               className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition ${
-                active ? "border-white/40 bg-white/15 text-foreground" : "border-white/10 bg-white/5 text-foreground/70 hover:bg-white/10"
+                active ? "border-border bg-white/15 text-foreground" : "border-border bg-white/5 text-foreground/70 hover:bg-white/10"
               }`}
             >
               <span className="h-2 w-2 rounded-full" style={{ background: colorFor(l), boxShadow: `0 0 8px ${colorFor(l)}` }} />

@@ -171,7 +171,7 @@ function Results() {
           <Link
             to="/compare"
             search={{ a: username, b: "" }}
-            className="inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-foreground hover:bg-white/20 backdrop-blur-md transition-all shadow-lg"
+            className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-wider text-foreground hover:bg-white/20 backdrop-blur-md transition-all shadow-lg"
           >
             ⚔ Compare
           </Link>
@@ -268,7 +268,7 @@ function Results() {
           {insights ? (
             <AIMentorChat insights={insights} />
           ) : (
-            <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f172a]/60 p-8 shadow-2xl backdrop-blur-xl md:p-12 text-center">
+            <div className="relative overflow-hidden rounded-[32px] border border-border bg-card p-8 shadow-2xl backdrop-blur-xl md:p-12 text-center">
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 4, repeat: Infinity, ease: "linear" }} className="mx-auto w-12 h-12 text-3xl mb-4">🧠</motion.div>
               <p className="text-foreground/70 font-semibold tracking-wider uppercase text-sm">Consulting AI Mentor...</p>
             </div>

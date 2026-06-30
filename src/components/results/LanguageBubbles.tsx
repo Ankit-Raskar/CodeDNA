@@ -65,7 +65,7 @@ export function LanguageBubbles({ data }: { data: GithubData }) {
 
   return (
     <div 
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#0f172a]/60 p-6 md:p-8 shadow-xl backdrop-blur-xl transition-colors hover:bg-[#0f172a]/80"
+      className="group relative overflow-hidden rounded-3xl border border-border bg-card p-6 md:p-8 shadow-xl backdrop-blur-xl transition-colors hover:bg-card"
       onMouseMove={handleMouseMove}
     >
       <motion.div
@@ -87,7 +87,7 @@ export function LanguageBubbles({ data }: { data: GithubData }) {
             key={hover}
             initial={{ opacity: 0, scale: 0.9, y: -6 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wide text-foreground shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md"
+            className="rounded-full border border-border bg-white/10 px-4 py-1.5 text-xs font-bold tracking-wide text-foreground shadow-[0_0_15px_rgba(255,255,255,0.1)] backdrop-blur-md"
           >
             {hover}
           </motion.div>

@@ -37,7 +37,7 @@ function List({ items, color }: { items: string[]; color: string }) {
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.1, type: "spring" }}
-          className="flex items-start gap-3 text-sm rounded-lg bg-white/5 p-2.5 border border-white/5 backdrop-blur-md"
+          className="flex items-start gap-3 text-sm rounded-lg bg-white/5 p-2.5 border border-border backdrop-blur-md"
         >
           <span className="mt-1 inline-block h-2 w-2 shrink-0 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.5)]" style={{ background: color }} />
           <span className="text-foreground/90 leading-tight">{s}</span>
@@ -83,15 +83,15 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
   const initialSuggestions = useMemo(() => SUGGESTIONS, []);
 
   return (
-    <div className="group relative overflow-hidden rounded-[32px] border border-white/10 bg-[#0f172a]/60 shadow-2xl backdrop-blur-xl">
+    <div className="group relative overflow-hidden rounded-[32px] border border-border bg-card shadow-2xl backdrop-blur-xl">
       {/* Dynamic Background Glow */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-transparent mix-blend-overlay"></div>
       
       {/* Header */}
-      <div className="relative flex items-center gap-4 border-b border-white/10 bg-white/5 p-5 backdrop-blur-md">
+      <div className="relative flex items-center gap-4 border-b border-border bg-white/5 p-5 backdrop-blur-md">
         <div className="relative grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-fuchsia-500 to-indigo-600 text-xl shadow-[0_0_20px_rgba(99,102,241,0.5)]">
           <span className="relative z-10">🧠</span>
-          <div className="absolute inset-0 rounded-2xl border border-white/20"></div>
+          <div className="absolute inset-0 rounded-2xl border border-border"></div>
         </div>
         <div>
           <p className="font-display text-lg font-black tracking-tight text-foreground">AI Mentor</p>
@@ -114,7 +114,7 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
               className={`flex items-end gap-3 ${m.role === "user" ? "flex-row-reverse" : ""}`}
             >
               <div
-                className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-white/10 text-foreground shadow-xl ${
+                className={`grid h-10 w-10 shrink-0 place-items-center rounded-full border border-border text-foreground shadow-xl ${
                   m.role === "user" ? "bg-white/10 backdrop-blur-md" : "bg-gradient-to-br from-fuchsia-500 to-indigo-600"
                 }`}
               >
@@ -124,7 +124,7 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
                 className={`max-w-[85%] rounded-[24px] px-5 py-4 text-[15px] shadow-lg backdrop-blur-md ${
                   m.role === "user"
                     ? "rounded-br-sm bg-indigo-500/20 border border-indigo-500/30 text-foreground"
-                    : "rounded-bl-sm border border-white/10 bg-white/5 text-foreground/90"
+                    : "rounded-bl-sm border border-border bg-white/5 text-foreground/90"
                 }`}
               >
                 <p className="leading-relaxed">{m.text}</p>
@@ -140,8 +140,8 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
               exit={{ opacity: 0, scale: 0.9 }}
               className="flex items-end gap-3"
             >
-              <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-fuchsia-500 to-indigo-600 border border-white/10 text-foreground shadow-xl">🧠</div>
-              <div className="flex gap-1.5 rounded-[24px] rounded-bl-sm border border-white/10 bg-white/5 px-5 py-4 backdrop-blur-md">
+              <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-fuchsia-500 to-indigo-600 border border-border text-foreground shadow-xl">🧠</div>
+              <div className="flex gap-1.5 rounded-[24px] rounded-bl-sm border border-border bg-white/5 px-5 py-4 backdrop-blur-md">
                 {[0, 1, 2].map((i) => (
                   <motion.span
                     key={i}
@@ -157,12 +157,12 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
       </div>
 
       {/* Suggestions */}
-      <div className="relative flex flex-wrap gap-2 border-t border-white/10 bg-black/20 px-5 py-4 backdrop-blur-md">
+      <div className="relative flex flex-wrap gap-2 border-t border-border bg-card px-5 py-4 backdrop-blur-md">
         {initialSuggestions.map((s) => (
           <button
             key={s}
             onClick={() => ask(s)}
-            className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-foreground/70 transition-all hover:border-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300"
+            className="rounded-full border border-border bg-white/5 px-4 py-2 text-[11px] font-bold uppercase tracking-wider text-foreground/70 transition-all hover:border-indigo-400 hover:bg-indigo-500/20 hover:text-indigo-300"
           >
             {s}
           </button>
@@ -175,13 +175,13 @@ export function AIMentorChat({ insights }: { insights: AIInsights }) {
           e.preventDefault();
           ask(input);
         }}
-        className="relative flex items-center gap-3 bg-black/40 p-4 backdrop-blur-xl"
+        className="relative flex items-center gap-3 bg-card p-4 backdrop-blur-xl"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask your mentor anything…"
-          className="flex-1 rounded-full border border-white/10 bg-white/5 px-6 py-3.5 text-[15px] text-foreground placeholder-white/30 outline-none transition-colors focus:border-indigo-500 focus:bg-white/10"
+          className="flex-1 rounded-full border border-border bg-white/5 px-6 py-3.5 text-[15px] text-foreground placeholder-white/30 outline-none transition-colors focus:border-indigo-500 focus:bg-white/10"
         />
         <button
           type="submit"

@@ -61,7 +61,7 @@ export function ShareCard({ data, insights, level, archetype, badges }: {
               <span className="rounded-full bg-white/20 px-2.5 py-1">Lvl {level}</span>
             </div>
             <div className="mt-6 flex items-center gap-4">
-              <img src={data.user.avatar_url} crossOrigin="anonymous" alt="" className="h-16 w-16 rounded-2xl border-2 border-white/40 shadow-xl" />
+              <img src={data.user.avatar_url} crossOrigin="anonymous" alt="" className="h-16 w-16 rounded-2xl border-2 border-border shadow-xl" />
               <div className="min-w-0">
                 <p className="truncate font-display text-xl font-bold">{data.user.name || data.user.login}</p>
                 <p className="truncate text-xs text-foreground/80">@{data.user.login}</p>

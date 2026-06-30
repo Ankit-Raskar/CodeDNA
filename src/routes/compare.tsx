@@ -46,7 +46,7 @@ function UserInput({
       className="card-soft relative flex items-center gap-3 overflow-hidden rounded-[24px] p-2 pr-3 bg-white/70 backdrop-blur-xl border border-white focus-within:border-indigo-400 focus-within:shadow-[0_0_20px_rgba(99,102,241,0.2)] transition-all"
     >
       <div className="absolute inset-0 bg-gradient-to-r from-indigo-50/50 to-purple-50/50 pointer-events-none" />
-      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-800 to-black text-lg font-black text-foreground shadow-md">
+      <span className="relative grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-200 text-lg font-black text-foreground shadow-md">
         {side}
       </span>
       <FiGithub className="relative shrink-0 text-slate-400 text-lg" />
@@ -125,7 +125,7 @@ function BattleCard({
         boxShadow: `0 40px 100px -20px ${r.glow}`,
       }}
     >
-      <div className="relative h-full w-full overflow-hidden rounded-[37px] bg-[#090b14] p-6 text-foreground md:p-8 custom-scrollbar">
+      <div className="relative h-full w-full overflow-hidden rounded-[37px] bg-card p-6 text-foreground md:p-8 custom-scrollbar">
         {/* Dynamic Highlight overlay */}
         <motion.div
           className="pointer-events-none absolute inset-0 z-50 mix-blend-overlay opacity-40 transition-opacity duration-300"
@@ -154,7 +154,7 @@ function BattleCard({
         />
 
         <div className="relative flex items-center justify-between">
-          <span className="rounded-full border border-white/20 bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-foreground/80 backdrop-blur-md">
+          <span className="rounded-full border border-border bg-white/5 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-foreground/80 backdrop-blur-md">
             Fighter {side}
           </span>
           <span
@@ -171,7 +171,7 @@ function BattleCard({
             <img
               src={data.user.avatar_url}
               alt={data.user.login}
-              className="relative h-28 w-28 rounded-full border-[3px] border-white/20 object-cover shadow-2xl transition-transform duration-500 group-hover:scale-110"
+              className="relative h-28 w-28 rounded-full border-[3px] border-border object-cover shadow-2xl transition-transform duration-500 group-hover:scale-110"
             />
             <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 rounded-full border-2 border-[#090b14] bg-slate-100 px-3 py-0.5 text-xs font-black text-slate-900 shadow-lg">
               LVL {level.level}
@@ -180,7 +180,7 @@ function BattleCard({
           <div className="mt-2 w-full min-w-0">
             <p className="truncate font-display text-3xl font-black">{data.user.name || data.user.login}</p>
             <p className="truncate text-sm text-foreground/50 tracking-wider">@{data.user.login}</p>
-            <div className="mx-auto mt-4 inline-flex items-center gap-3 rounded-[16px] border border-white/10 bg-white/5 p-1.5 pr-4 backdrop-blur-sm">
+            <div className="mx-auto mt-4 inline-flex items-center gap-3 rounded-[16px] border border-border bg-white/5 p-1.5 pr-4 backdrop-blur-sm">
               <span
                 className="grid h-10 w-10 place-items-center rounded-xl text-2xl shadow-inner"
                 style={{ background: `linear-gradient(135deg, ${archetype.color}, ${archetype.color2})` }}
@@ -197,18 +197,18 @@ function BattleCard({
             { l: "★ Stars", v: data.totals.stars.toLocaleString() },
             { l: "📦 Repos", v: data.totals.repos },
           ].map((s) => (
-            <div key={s.l} className="rounded-[20px] border border-white/10 bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
+            <div key={s.l} className="rounded-[20px] border border-border bg-white/5 p-4 backdrop-blur-sm transition-colors hover:bg-white/10">
               <div className="text-2xl font-black">{s.v}</div>
               <div className="mt-1 text-[10px] uppercase tracking-widest text-foreground/50">{s.l}</div>
             </div>
           ))}
         </div>
 
-        <div className="relative mt-6 rounded-[20px] border border-white/10 bg-white/5 p-5 backdrop-blur-sm">
+        <div className="relative mt-6 rounded-[20px] border border-border bg-white/5 p-5 backdrop-blur-sm">
           <div className="flex items-center justify-between text-[11px] font-black uppercase tracking-[0.2em] text-foreground/70">
             <span>Power Level</span><span>{archetype.power}/100</span>
           </div>
-          <div className="mt-3 h-3 overflow-hidden rounded-full bg-black/40 shadow-inner">
+          <div className="mt-3 h-3 overflow-hidden rounded-full bg-card shadow-inner">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${archetype.power}%` }}
@@ -225,7 +225,7 @@ function BattleCard({
           <p className="text-center text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">Weapon of Choice</p>
           <div className="mt-3 flex flex-wrap justify-center gap-2">
             {top.map((l) => (
-              <span key={l.name} className="rounded-lg border border-white/10 bg-black/40 px-3 py-1.5 text-[11px] font-medium text-foreground/80 shadow-sm">
+              <span key={l.name} className="rounded-lg border border-border bg-card px-3 py-1.5 text-[11px] font-medium text-foreground/80 shadow-sm">
                 {l.name} <span className="text-foreground/40">· {l.pct}%</span>
               </span>
             ))}

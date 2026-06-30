@@ -67,7 +67,7 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
       transition={{ delay: 0.2, duration: 0.6 }}
       className={`relative mx-auto flex w-full flex-col ${compact ? "max-w-md" : "max-w-2xl mt-10"}`}
     >
-      <div className={`card-soft relative z-20 flex w-full items-center gap-2 rounded-full p-2 pl-5 ring-soft transition-all ${focused ? "ring-2 ring-primary/50 shadow-[0_0_30px_rgba(99,102,241,0.2)] bg-[#0f172a]" : ""}`}>
+      <div className={`card-soft relative z-20 flex w-full items-center gap-2 rounded-full p-2 pl-5 ring-soft transition-all ${focused ? "ring-2 ring-primary/50 shadow-[0_0_30px_rgba(99,102,241,0.2)] bg-card" : ""}`}>
         <FiSearch className="h-5 w-5 text-muted-foreground" />
         <input
           value={v}
@@ -95,7 +95,7 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
             initial={{ opacity: 0, y: -10, scale: 0.98 }}
             animate={{ opacity: 1, y: 8, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98, transition: { duration: 0.15 } }}
-            className="absolute top-full z-10 w-full overflow-hidden rounded-2xl border border-white/10 bg-[#0f172a]/95 p-4 shadow-2xl backdrop-blur-xl text-left"
+            className="absolute top-full z-10 w-full overflow-hidden rounded-2xl border border-border bg-card p-4 shadow-2xl backdrop-blur-xl text-left"
           >
             {v ? (
               <div
@@ -144,7 +144,7 @@ export function SearchBar({ initial = "", compact = false }: { initial?: string;
                         key={u}
                         type="button"
                         onClick={() => selectUser(u)}
-                        className="rounded-full border border-white/5 bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:bg-white/10 hover:text-foreground hover:border-primary/30"
+                        className="rounded-full border border-border bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground transition-all hover:bg-white/10 hover:text-foreground hover:border-primary/30"
                       >
                         @{u}
                       </button>
