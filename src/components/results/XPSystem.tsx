@@ -40,7 +40,7 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
       <div className="relative z-10 flex flex-col items-start gap-8 md:flex-row md:items-center md:justify-between">
         <div>
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-cyan-400">Developer Class</p>
-          <h3 className="mt-2 font-display text-4xl font-black text-foreground drop-shadow-lg md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-white to-white/70">{archetype}</h3>
+          <h3 className="mt-2 font-display text-4xl font-black md:text-5xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-cyan-500">{archetype}</h3>
           <p className="mt-3 text-sm font-medium text-foreground/60"><AnimatedCounter value={xp} /> XP earned</p>
         </div>
         <motion.div 
@@ -95,8 +95,8 @@ export function XPSystem({ level, pct, xp, achievements, archetype }: {
                 🏆
               </div>
               <div className="min-w-0 flex-1">
-                <p className={`truncate font-bold ${a.earned ? "text-amber-100" : "text-foreground/50"}`}>{a.name}</p>
-                <p className={`truncate text-xs mt-0.5 ${a.earned ? "text-amber-200/70" : "text-foreground/30"}`}>{a.description}</p>
+                <p className={`truncate font-bold ${a.earned ? "text-amber-800" : "text-foreground/50"}`}>{a.name}</p>
+                <p className={`truncate text-xs mt-0.5 ${a.earned ? "text-amber-700/80" : "text-foreground/30"}`}>{a.description}</p>
               </div>
             </motion.div>
           ))}

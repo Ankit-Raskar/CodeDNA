@@ -79,7 +79,7 @@ export function Constellation({ data }: { data: GithubData }) {
   const topNamed = positions.slice(0, 6);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border bg-[radial-gradient(120%_90%_at_20%_0%,#1e1b4b_0%,#0b1027_45%,#05060f_100%)] p-4 text-foreground shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)] md:p-6">
+    <div className="relative overflow-hidden rounded-3xl border border-border bg-[radial-gradient(120%_90%_at_20%_0%,#1e1b4b_0%,#0b1027_45%,#05060f_100%)] p-4 text-white shadow-[0_30px_80px_-40px_rgba(15,23,42,0.9)] md:p-6">
       {/* Nebula clouds */}
       <div aria-hidden className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 -top-24 h-[420px] w-[420px] rounded-full bg-indigo-500/25 blur-3xl animate-blob" />
