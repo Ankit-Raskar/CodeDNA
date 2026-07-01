@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import type { Achievement } from "@/lib/personality";
-import confetti from "canvas-confetti";
 import { FiAward, FiStar, FiZap, FiCode, FiClock, FiTerminal, FiTarget, FiActivity, FiShield, FiHeart } from "react-icons/fi";
 
 const RARITY = {
@@ -24,12 +23,13 @@ const ICONS: Record<string, any> = {
 };
 
 export function BadgesGrid({ badges }: { badges: Achievement[] }) {
-  const fireConfetti = (e: React.MouseEvent<HTMLDivElement>, earned: boolean) => {
+  const fireConfetti = async (e: React.MouseEvent<HTMLDivElement>, earned: boolean) => {
     if (!earned) return;
     const rect = e.currentTarget.getBoundingClientRect();
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
     
+    const confetti = (await import("canvas-confetti")).default;
     confetti({
       particleCount: 80,
       spread: 70,

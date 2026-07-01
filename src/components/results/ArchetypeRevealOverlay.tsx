@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { FiArrowRight } from "react-icons/fi";
 import type { Archetype } from "@/lib/archetype";
 import { RARITY_STYLE } from "@/lib/archetype";
@@ -36,8 +35,9 @@ export function ArchetypeRevealOverlay({
     // Card flips a beat after mount
     const t1 = setTimeout(() => setFlipped(true), 700);
     // Confetti when card lands
-    const t2 = setTimeout(() => {
+    const t2 = setTimeout(async () => {
       const colors = [archetype.color, archetype.color2, r.color];
+      const confetti = (await import("canvas-confetti")).default;
       confetti({ particleCount: 140, spread: 90, origin: { y: 0.55 }, colors, scalar: 1.1 });
       setTimeout(() => confetti({ particleCount: 80, angle: 60, spread: 60, origin: { x: 0 }, colors }), 250);
       setTimeout(() => confetti({ particleCount: 80, angle: 120, spread: 60, origin: { x: 1 }, colors }), 250);

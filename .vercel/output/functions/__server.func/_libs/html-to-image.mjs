@@ -618,6 +618,7 @@ async function embedWebFonts(clonedNode, options) {
 var es_exports = /* @__PURE__ */ __exportAll({
 	toBlob: () => toBlob,
 	toCanvas: () => toCanvas,
+	toPng: () => toPng,
 	toSvg: () => toSvg
 });
 async function toSvg(node, options = {}) {
@@ -647,6 +648,9 @@ async function toCanvas(node, options = {}) {
 	}
 	context.drawImage(img, 0, 0, canvas.width, canvas.height);
 	return canvas;
+}
+async function toPng(node, options = {}) {
+	return (await toCanvas(node, options)).toDataURL();
 }
 async function toBlob(node, options = {}) {
 	return await canvasToBlob(await toCanvas(node, options));
