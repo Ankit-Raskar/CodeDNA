@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { createFileRoute, Link, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { motion, useScroll, useSpring } from "framer-motion";
@@ -33,7 +32,6 @@ import { Wrapped } from "@/components/results/Wrapped";
 import { Yearbook } from "@/components/results/Yearbook";
 import { DnaHelix } from "@/components/results/DnaHelix";
 import { computeArchetype } from "@/lib/archetype";
-import { QuizModal } from "@/components/results/QuizModal";
 import { AIFeedback } from "@/components/results/AIFeedback";
 import { TimeMachine } from "@/components/results/TimeMachine";
 import { ResumeGenerator } from "@/components/results/ResumeGenerator";
@@ -141,7 +139,6 @@ function Results() {
   const insights = ai.data ?? null;
   const archetype = computeArchetype(data);
   const archetypeName = insights?.archetype || archetype.name;
-  const [quizCompleted, setQuizCompleted] = useState(false);
 
   return (
     <main className="relative min-h-screen pb-32">
@@ -151,13 +148,7 @@ function Results() {
       />
       <ConfettiBurst trigger={!!insights} />
       
-      {!quizCompleted && (
-        <QuizModal username={username} onComplete={() => setQuizCompleted(true)} />
-      )}
-      
-      {quizCompleted && (
-        <ArchetypeRevealOverlay archetype={archetype} username={username} />
-      )}
+      <ArchetypeRevealOverlay archetype={archetype} username={username} />
 
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-6 relative z-10">
         <Link to="/" className="flex items-center gap-2 text-sm group">

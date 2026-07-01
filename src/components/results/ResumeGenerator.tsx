@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { FiDownload, FiPrinter, FiBriefcase, FiAward, FiStar, FiZap } from "react-icons/fi";
 import type { GithubData } from "@/lib/github.functions";
 import { topLanguages, buildAISummary } from "@/lib/personality";
@@ -5,9 +6,33 @@ import { topLanguages, buildAISummary } from "@/lib/personality";
 export function ResumeGenerator({ data }: { data: GithubData }) {
   const topLangs = topLanguages(data.languageBytes, 6);
   const aiSummary = buildAISummary(data);
+  const resumeRef = useRef<HTMLDivElement>(null);
+  const [saving, setSaving] = useState(false);
 
-  const handlePrint = () => {
-    window.print();
+  const handleSaveAsPDF = async () => {
+    if (!resumeRef.current) return;
+    setSaving(true);
+    try {
+      const htmlToImage = await import("html-to-image");
+      const dataUrl = await htmlToImage.toPng(resumeRef.current, {
+        cacheBust: true,
+        backgroundColor: "#ffffff",
+        pixelRatio: 2,
+        style: {
+          borderRadius: "0",
+        },
+      });
+      const link = document.createElement("a");
+      link.download = `${data.user.login}-resume.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Failed to export resume:", err);
+      // Fallback to print dialog
+      window.print();
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCopyMarkdown = () => {
@@ -45,16 +70,17 @@ ${data.repos.slice(0, 5).map(r => `- **${r.name}** (${r.stargazers_count} stars)
             <FiDownload /> Markdown
           </button>
           <button 
-            onClick={handlePrint}
-            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-foreground rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
+            onClick={handleSaveAsPDF}
+            disabled={saving}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 text-foreground rounded-xl font-bold transition-all shadow-md hover:shadow-lg"
           >
-            <FiPrinter /> Save as PDF
+            <FiPrinter /> {saving ? "Saving…" : "Save as PDF"}
           </button>
         </div>
       </div>
 
-      {/* The Resume Document - We use a special ID to target it in print CSS if needed, though standard print CSS usually hides everything else */}
-      <div id="resume-document" className="bg-white rounded-2xl border border-slate-200 p-8 md:p-12 shadow-sm font-sans">
+      {/* The Resume Document - captured by html-to-image for download */}
+      <div ref={resumeRef} id="resume-document" className="bg-white rounded-2xl border border-slate-200 p-8 md:p-12 shadow-sm font-sans">
         {/* Resume Header */}
         <div className="border-b-2 border-slate-800 pb-6 mb-6 text-center sm:text-left flex flex-col sm:flex-row items-center sm:items-start gap-6">
           {data.user.avatar_url && (

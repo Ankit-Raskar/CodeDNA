@@ -75,10 +75,10 @@ export const fetchGithubProfile = createServerFn({ method: "GET" })
     if (d?.token) {
       const t = String(d.token).trim();
       if (t.length > 0) {
-        if (t.length > 255 || !/^(gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)$/.test(t)) {
-          throw new Error("Invalid token");
+        // Silently ignore malformed tokens instead of throwing — avoids error boundary
+        if (t.length <= 255 && /^(gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)$/.test(t)) {
+          token = t;
         }
-        token = t;
       }
     }
     return { username: u, token };

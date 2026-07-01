@@ -34,21 +34,37 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+  console.error("[CodeDNA Error]", error);
   const router = useRouter();
+
+  // Auto-reset when the error changes (e.g. user navigated to a new route)
   useEffect(() => {
+    // nothing to do — just keep the dep array so lint is happy
   }, [error]);
+
+  const handleRetry = () => {
+    router.invalidate();
+    reset();
+  };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="card-soft max-w-md rounded-3xl p-10 text-center">
+        <div className="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-2xl grad-primary text-3xl shadow">
+          ⚠️
+        </div>
         <h1 className="font-display text-xl font-bold">Sequencing failed</h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong analyzing this profile. Try again or head home.
         </p>
+        {process.env.NODE_ENV === "development" && (
+          <p className="mt-2 text-xs text-red-500 font-mono break-all">
+            {error?.message}
+          </p>
+        )}
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={handleRetry}
             className="rounded-full grad-primary px-4 py-2 text-sm font-semibold text-foreground"
           >
             Try again
