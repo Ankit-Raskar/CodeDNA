@@ -1,4 +1,6 @@
+import { r as __exportAll } from "../_runtime.mjs";
 //#region node_modules/canvas-confetti/dist/confetti.module.mjs
+var confetti_module_exports = /* @__PURE__ */ __exportAll({ default: () => confetti_module_default });
 var module = {};
 (function main(global, module, isWorker, workerSize) {
 	var canUseWorker = !!(global.Worker && global.Blob && global.Promise && global.OffscreenCanvas && global.OffscreenCanvasRenderingContext2D && global.HTMLCanvasElement && global.HTMLCanvasElement.prototype.transferControlToOffscreen && global.URL && global.URL.createObjectURL);
@@ -620,4 +622,4 @@ var module = {};
 var confetti_module_default = module.exports;
 module.exports.create;
 //#endregion
-export { confetti_module_default as t };
+export { confetti_module_exports as t };
