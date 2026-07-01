@@ -10,8 +10,7 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
       throw error;
     }
     console.error(error);
-    const errStr = error instanceof Error ? error.stack : String(error);
-    return new Response(renderErrorPage().replace("Something went wrong on our end.", "Error (start.ts): " + errStr), {
+    return new Response(renderErrorPage(), {
       status: 500,
       headers: { "content-type": "text/html; charset=utf-8" },
     });
