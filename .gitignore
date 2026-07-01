@@ -31,4 +31,4 @@ dist-ssr
 *.sln
 *.sw?
 
-.vercel
+# .vercel intentionally tracked (pre-built output)
